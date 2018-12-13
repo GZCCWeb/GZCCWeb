@@ -10,7 +10,7 @@ spring:
   datasource: #数据库配置
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://129.204.32.2:3306/management?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-      username: root
+    username: root
     password: 102398
   mvc: # 模板引擎配置
     view:

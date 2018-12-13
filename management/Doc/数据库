@@ -1,0 +1,6 @@
+数据库连接
+                                             url: 129.204.32.2
+                                             username: root
+                                             password: 102398
+                                             port: 3306
+                                             sql: management

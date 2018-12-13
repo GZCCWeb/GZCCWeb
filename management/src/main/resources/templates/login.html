@@ -18,13 +18,13 @@
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
     <title>登陆页面</title>
     <!-- Icons-->
-    <link href="vendors/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
-    <link href="vendors/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
-    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="vendors/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <link href="/codeUI/vendors/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="/codeUI/vendors/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+    <link href="/codeUI/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/codeUI/vendors/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
     <!-- Main styles for this application-->
-    <link href="css/style.css" rel="stylesheet">
-    <link href="vendors/pace-progress/css/pace.min.css" rel="stylesheet">
+    <link href="/codeUI/css/style.css" rel="stylesheet">
+    <link href="/codeUI/vendors/pace-progress/css/pace.min.css" rel="stylesheet">
 </head>
 <body class="app flex-row align-items-center">
 <div class="container">
@@ -41,7 +41,7 @@
                                   <i class="icon-user"></i>
                                 </span>
                             </div>
-                            <input class="form-control" type="text" placeholder="账号名">
+                            <input id="account" class="form-control" type="text" placeholder="账号名">
                         </div>
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
@@ -49,11 +49,11 @@
                                   <i class="icon-lock"></i>
                                 </span>
                             </div>
-                            <input class="form-control" type="password" placeholder="密码">
+                            <input id="password" class="form-control" type="password" placeholder="密码">
                         </div>
                         <div class="row">
                             <div class="col-6">
-                                <button class="btn btn-primary px-4" type="button">登陆</button>
+                                <button id="loginSubmit" class="btn btn-primary px-4" type="button">登陆</button>
                             </div>
                             <div class="col-6 text-right">
                                 <button class="btn btn-link px-0" type="button">忘记密码?</button>
@@ -76,11 +76,39 @@
     </div>
 </div>
 <!-- CoreUI and necessary plugins-->
-<script src="vendors/jquery/js/jquery.min.js"></script>
-<script src="vendors/popper.js/js/popper.min.js"></script>
-<script src="vendors/bootstrap/js/bootstrap.min.js"></script>
-<script src="vendors/pace-progress/js/pace.min.js"></script>
-<script src="vendors/perfect-scrollbar/js/perfect-scrollbar.min.js"></script>
-<script src="vendors/@coreui/coreui/js/coreui.min.js"></script>
+<script src="/codeUI/vendors/jquery/js/jquery.min.js"></script>
+<script src="/codeUI/vendors/popper.js/js/popper.min.js"></script>
+<script src="/codeUI/vendors/bootstrap/js/bootstrap.min.js"></script>
+<script src="/codeUI/vendors/pace-progress/js/pace.min.js"></script>
+<script src="/codeUI/vendors/perfect-scrollbar/js/perfect-scrollbar.min.js"></script>
+<script src="/codeUI/vendors/@coreui/coreui/js/coreui.min.js"></script>
+
+<!--ajax-->
+<script>
+    $('#loginSubmit').click(function () {
+        var account = $("#account").val();
+        var password = $("#password").val();
+
+        var user = {
+            "account": account,
+            "password": password
+        }
+        user = JSON.stringify(user);
+        $.ajax({
+            url: "loginService",
+            type: "POST",
+            dataType: "JSON",
+            data: user,
+            async: false,
+            contentType: "application/json;charset=UTF-8",
+            success: function (msg) {
+                alert("登陆成功");
+            },
+            error: function () {
+                alert("与服务器失去连接");
+            }
+        })
+    })
+</script>
 </body>
 </html>
