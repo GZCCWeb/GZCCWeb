@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.system.management.dao.TestMapper" >
+    <resultMap id="testMapper" type="com.system.management.model.TestModel" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="author" property="author" jdbcType="VARCHAR" />
+        <result column="date" property="date" jdbcType="DATE" />
+    </resultMap>
+
+    <select id="selectByID" parameterType="int" resultMap="testMapper">
+        SELECT * FROM test_table WHERE id = #{id}
+    </select>
+</mapper>
