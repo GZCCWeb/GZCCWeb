@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<!--
+* CoreUI - Free Bootstrap Admin Template
+* @version v2.0.0
+* @link https://coreui.io
+* Copyright (c) 2018 creativeLabs Łukasz Holeczek
+* Licensed under MIT (https://coreui.io/license)
+-->
+
+<html lang="en">
+  <head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
+    <meta name="author" content="Łukasz Holeczek">
+    <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
+    <title>CoreUI Free Bootstrap Admin Template</title>
+    <!-- Icons-->
+    <link href="vendors/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="vendors/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="vendors/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <!-- Main styles for this application-->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="vendors/pace-progress/css/pace.min.css" rel="stylesheet">
+  </head>
+  <body class="app header-fixed  sidebar-close aside-menu-fixed">
+    <header class="app-header navbar">
+      <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img class="navbar-brand-full" src="img/brand/logo.svg" width="89" height="25" alt="CoreUI Logo">
+        <img class="navbar-brand-minimized" src="img/brand/sygnet.svg" width="30" height="30" alt="CoreUI Logo">
+      </a>
+      <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <ul class="nav navbar-nav d-md-down-none">
+        <li class="nav-item px-3">
+          <a class="nav-link" href="#">Dashboard</a>
+        </li>
+        <li class="nav-item px-3">
+          <a class="nav-link" href="#">Users</a>
+        </li>
+        <li class="nav-item px-3">
+          <a class="nav-link" href="#">Settings</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item d-md-down-none">
+          <a class="nav-link" href="#">
+            <i class="icon-bell"></i>
+            <span class="badge badge-pill badge-danger">5</span>
+          </a>
+        </li>
+        <li class="nav-item d-md-down-none">
+          <a class="nav-link" href="#">
+            <i class="icon-list"></i>
+          </a>
+        </li>
+        <li class="nav-item d-md-down-none">
+          <a class="nav-link" href="#">
+            <i class="icon-location-pin"></i>
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <img class="img-avatar" src="img/avatars/6.jpg" alt="admin@bootstrapmaster.com">
+          </a>
+        </li>
+      </ul>
+      <button class="navbar-toggler aside-menu-toggler d-md-down-none" type="button" data-toggle="aside-menu-lg-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <button class="navbar-toggler aside-menu-toggler d-lg-none" type="button" data-toggle="aside-menu-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </header>
+
+    <div class="app-body">
+        <main class="main">
+            <!-- Breadcrumb -->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">首页</li>
+                <li class="breadcrumb-item active">账单</li>
+
+                <!-- Breadcrumb Menu-->
+                <li class="breadcrumb-menu d-md-down-none">
+                    <div class="btn-group" role="group" aria-label="Button group">
+                        <!--<a class="btn" href="/user"><i
+                            class="fa fa-user-secret"></i>新增</a>-->
+                    </div>
+                </li>
+            </ol>
+            <!--main content-->
+            <div class="container">
+                <div class="animated fadeIn">
+                    <div class="card" id="items-manager">
+                        <div class="card-header">
+                            <i class="icon-people icons"></i> 水电费
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-responsive-sm table-bordered">
+                                <thead>
+                                <tr>
+                                    <th class="">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" onclick="checkAll();"
+                                                   id="checkAll" value="all"/>
+                                            <label class="form-check-label" for="checkAll"></label>
+                                        </div>
+                                    </th>
+                                    <th>房间号</th>
+                                    <th>月份</th>
+                                    <th>应缴水费</th>
+                                    <th>应缴电费</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!--vue语法，模板定义-->
+                                <tr v-for="(item, index) in pageItems">
+                                    <td>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox" v-bind:id="'item-' + index"
+                                                   v-bind:value="index"/>#{{index+1}}
+                                            <label class="form-check-label" v-bind:for="'item-' + index"></label>
+                                        </div>
+                                    </td>
+                                    <td>{{ item.room_id }}</td>
+                                    <td>{{ item.fee_date }}</td>
+                                    <td>{{ item.water_fee }}</td>
+                                    <td>{{ item.electric_fee }}</td>
+                                    <td>
+                                        <span class="badge badge-success" v-if="item.status=='已缴费'">{{ item.pay_status }}</span>
+                                        <span class="badge badge-danger" v-if="item.status=='未缴费'">{{ item.pay_status }}</span>
+                                    </td>
+
+                                    <td>
+                                        <a class="btn btn-success" v-bind:href="'javascript:loadItemModal('+index+')'" v-if="item.status=='未缴费'">
+                                            <i class="fa fa-edit"></i>&nbsp;支付</a>
+                                        <a class="btn btn-primary disabled" v-bind:href="'javascript:loadItemModal('+index+')'" v-if="item.status=='已缴费'" >
+                                            已支付</a>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal " id="item-modal" data-backdrop="static" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-primary" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal-title">确认支付</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-content">
+                    <form class="needs-validation" id="item-form">
+                        <div class="modal-body font-weight-bold" id="confirm-modal-content">
+                            <h5>共需要支付<strong id="total" style="color: red"></strong>元</h5>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="save" class="btn btn-primary">确认支付</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <footer class="app-footer">
+      <div>
+        <a href="https://coreui.io">CoreUI</a>
+        <span>&copy; 2018 creativeLabs.</span>
+      </div>
+      <div class="ml-auto">
+        <span>Powered by</span>
+        <a href="https://coreui.io">CoreUI</a>
+      </div>
+    </footer>
+
+    <!-- CoreUI and necessary plugins-->
+    <script src="vendors/jquery/js/jquery.min.js"></script>
+    <script src="vendors/popper.js/js/popper.min.js"></script>
+    <script src="vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendors/pace-progress/js/pace.min.js"></script>
+    <script src="vendors/perfect-scrollbar/js/perfect-scrollbar.min.js"></script>
+    <script src="vendors/@coreui/coreui/js/coreui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script>
+        $.ajax({
+            url: "/bill",
+            type: "GET",
+            data: 202,
+            success: function (msg) {
+                alert("获取成功");
+            },
+            error: function () {
+                alert("与服务器失去连接");
+            }
+        })
+
+        var pageItems = [
+            {room:'202',mouth:"2018-11-01",water:25,electric:12,status:"已缴费"},
+            {room:'202',mouth:"2018-11-02",water:26,electric:14,status:"未缴费"},
+            {room:'203',mouth:"2018-11-02",water:26,electric:14,status:"未缴费"}
+        ]
+        var items= new Vue({
+            el: '#items-manager',
+           data: {
+                pageItems:pageItems
+            }
+        });
+        function checkAll() {
+            var selected = $('#checkAll').get(0).checked;
+            var i = 0;
+
+            $.each($("#items-manager table tbody input[type=checkbox]"), function (index, element) {
+                this.checked = selected;
+                return;
+            });
+
+        }
+        function loadItemModal(itemIndex) {
+            //还原表单为未检查状态（之前的操作后的表单状态会保留需要还原）
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.classList.remove('was-validated');
+            });
+            var total = pageItems[itemIndex].water+pageItems[itemIndex].electric
+            $('#modal-title').text(pageItems[itemIndex].mouth+"账单");
+            $('#total').text(total);
+            $('#item-modal').modal('show');
+        }
+    </script>
+  </body>
+</html>
