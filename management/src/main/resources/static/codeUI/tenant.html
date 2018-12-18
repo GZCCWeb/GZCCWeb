@@ -7,7 +7,7 @@
 * Licensed under MIT (https://coreui.io/license)
 -->
 
-<html lang="en">
+<html lang="ZN">
   <head>
     <base href="./">
     <meta charset="utf-8">
@@ -131,13 +131,13 @@
                                             <label class="form-check-label" v-bind:for="'item-' + index"></label>
                                         </div>
                                     </td>
-                                    <td>{{ item.room_id }}</td>
-                                    <td>{{ item.fee_date }}</td>
-                                    <td>{{ item.water_fee }}</td>
-                                    <td>{{ item.electric_fee }}</td>
+                                    <td>{{ item.room }}</td>
+                                    <td>{{ item.mouth }}</td>
+                                    <td>{{ item.water }}</td>
+                                    <td>{{ item.electric }}</td>
                                     <td>
-                                        <span class="badge badge-success" v-if="item.status=='已缴费'">{{ item.pay_status }}</span>
-                                        <span class="badge badge-danger" v-if="item.status=='未缴费'">{{ item.pay_status }}</span>
+                                        <span class="badge badge-success" v-if="item.status=='已缴费'">{{ item.status }}</span>
+                                        <span class="badge badge-danger" v-if="item.status=='未缴费'">{{ item.status }}</span>
                                     </td>
 
                                     <td>
