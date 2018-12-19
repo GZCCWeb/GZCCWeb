@@ -2,72 +2,71 @@ package com.system.management.model;
 
 public class User {
     private int id;
-    private String account;
-    private String password;
-    private String role;
-    private String phone;
-    private String email;
+    private String username;
+    private String sex;
+    private String roomId;
+    private String registerDatetime;
+    private String phoneNumber;
+    private String idNumber;
 
-    public User() {
-    }
+
 
     public int getId() {
         return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public String getRegisterDatetime() {
+        return registerDatetime;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getIdNumber() {
+        return idNumber;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public String getAccount() {
-        return account;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
-    public String getPassword() {
-        return password;
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setRegisterDatetime(String registerDatetime) {
+        this.registerDatetime = registerDatetime;
     }
 
-    public String getRole() {
-        return role;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
     }
 
-    public String getPhone() {
-        return phone;
-    }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", account='" + account + '\'' +
-                ", password='" + password + '\'' +
-                ", role='" + role + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
 }
