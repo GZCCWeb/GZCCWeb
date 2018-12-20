@@ -90,73 +90,121 @@
                 <!-- Breadcrumb Menu-->
                 <li class="breadcrumb-menu d-md-down-none">
                     <div class="btn-group" role="group" aria-label="Button group">
-                        <!--<a class="btn" href="/user"><i
-                            class="fa fa-user-secret"></i>新增</a>-->
+                        <!--<a class="btn" href="/user"><i-->
+                            <!--class="fa fa-user-secret"></i>新增</a>-->
                     </div>
                 </li>
             </ol>
+
             <!--main content-->
             <div class="container">
                 <div class="animated fadeIn">
-                    <div class="card" id="items-manager">
-                        <div class="card-header">
-                            <i class="icon-people icons"></i> 水电费
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" >
+                            <a id="paid" class="nav-link" data-toggle="tab" href="#paid" role="tab" aria-controls="paid" aria-selected="false">
+                                <i class="icon-calculator"></i> 已支付
+                            </a>
+                        </li>
+                        <li class="nav-item" >
+                            <a id="unpaid" class="nav-link active show" data-toggle="tab" href="#unpaid" role="tab" aria-controls="unpaid" aria-selected="true">
+                                <i class="icon-basket-loaded"></i> 未支付
+                                <span class="badge badge-pill badge-danger">2</span>
+                            </a>
+                        </li>
+                        <li class="nav-item" >
+                            <a id="allpaid" class="nav-link" data-toggle="tab" href="#allpaid" role="tab" aria-controls="allpaid">
+                                <i class="icon-pie-chart"></i> 全部</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <!--main-table-->
+                        <div class="card" id="items-manager">
+                            <div class="card-header">
+                                <i class="icon-people icons"></i> 水电费
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-responsive-sm table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th class="">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" onclick="checkAll();"
+                                                       id="checkAll" value="all"/>
+                                                <label class="form-check-label" for="checkAll"></label>
+                                            </div>
+                                        </th>
+                                        <th>房间号</th>
+                                        <th>月份</th>
+                                        <th>应缴水费</th>
+                                        <th>应缴电费</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!--vue语法，模板定义-->
+                                    <tr v-for="(item, index) in pageItems">
+                                        <td>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" v-bind:id="'item-' + index"
+                                                       v-bind:value="index"/>#{{index+1}}
+                                                <label class="form-check-label" v-bind:for="'item-' + index"></label>
+                                            </div>
+                                        </td>
+                                        <td>{{ item.room_id }}</td>
+                                        <td>{{ item.fee_date }}</td>
+                                        <td>{{ item.water_fee }}</td>
+                                        <td>{{ item.electric_fee }}</td>
+                                        <td>
+                                            <span class="badge badge-success" v-if="item.pay_status=='已缴费'">{{ item.pay_status }}</span>
+                                            <span class="badge badge-danger" v-if="item.pay_status=='未缴费'">{{ item.pay_status }}</span>
+                                        </td>
+
+                                        <td>
+                                            <a class="btn btn-success" v-bind:href="'javascript:loadItemModal('+index+')'" v-if="item.pay_status=='未缴费'">
+                                                <i class="fa fa-edit"></i>&nbsp;支付</a>
+                                            <a class="btn btn-primary disabled" v-bind:href="'javascript:loadItemModal('+index+')'" v-if="item.pay_status=='已缴费'" >
+                                                已支付</a>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+
+
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <table class="table table-responsive-sm table-bordered">
-                                <thead>
-                                <tr>
-                                    <th class="">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" onclick="checkAll();"
-                                                   id="checkAll" value="all"/>
-                                            <label class="form-check-label" for="checkAll"></label>
-                                        </div>
-                                    </th>
-                                    <th>房间号</th>
-                                    <th>月份</th>
-                                    <th>应缴水费</th>
-                                    <th>应缴电费</th>
-                                    <th>状态</th>
-                                    <th>操作</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <!--vue语法，模板定义-->
-                                <tr v-for="(item, index) in pageItems">
-                                    <td>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" v-bind:id="'item-' + index"
-                                                   v-bind:value="index"/>#{{index+1}}
-                                            <label class="form-check-label" v-bind:for="'item-' + index"></label>
-                                        </div>
-                                    </td>
-                                    <td>{{ item.room }}</td>
-                                    <td>{{ item.mouth }}</td>
-                                    <td>{{ item.water }}</td>
-                                    <td>{{ item.electric }}</td>
-                                    <td>
-                                        <span class="badge badge-success" v-if="item.status=='已缴费'">{{ item.status }}</span>
-                                        <span class="badge badge-danger" v-if="item.status=='未缴费'">{{ item.status }}</span>
-                                    </td>
-
-                                    <td>
-                                        <a class="btn btn-success" v-bind:href="'javascript:loadItemModal('+index+')'" v-if="item.status=='未缴费'">
-                                            <i class="fa fa-edit"></i>&nbsp;支付</a>
-                                        <a class="btn btn-primary disabled" v-bind:href="'javascript:loadItemModal('+index+')'" v-if="item.status=='已缴费'" >
-                                            已支付</a>
-                                    </td>
-                                </tr>
-
-                                </tbody>
-                            </table>
-
-
-                        </div>
+                        <!--<div class="tab-pane" id="paid" role="tabpanel">1</div>-->
+                        <!--<div class="tab-pane active show" id="unpaid" role="tabpanel">2</div>-->
+                        <!--<div class="tab-pane" id="all" role="tabpanel">3</div>-->
                     </div>
+
                 </div>
             </div>
         </main>
+    </div>
+
+    <div class="modal " id="message-modal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog  modal-danger" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="message-modal-title">信息</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body font-weight-bold" id="message-modal-content">
+                    显示信息！
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
 
     <div class="modal " id="item-modal" data-backdrop="static" tabindex="-1" role="dialog"
@@ -173,7 +221,7 @@
                 <div class="modal-body" id="modal-content">
                     <form class="needs-validation" id="item-form">
                         <div class="modal-body font-weight-bold" id="confirm-modal-content">
-                            <h5>共需要支付<strong id="total" style="color: red"></strong>元</h5>
+                            <h5>共需要支付<strong id="total" style="color: red">0</strong>元</h5>
                         </div>
                     </form>
                 </div>
@@ -207,27 +255,37 @@
     <script src="vendors/@coreui/coreui/js/coreui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
     <script>
+        var paidItems = []
+        var unPaidItems = []
+        var allPaidItems = []
+
+        var itemsIndex = -1;
+        var user = {"room_id":"202"}
+
         $.ajax({
             url: "/bill",
             type: "GET",
-            data: 202,
+            data: user,
+            dataType: "json",//表示返回的格式是json
             success: function (msg) {
-                alert("获取成功");
+                for (var i=0;i<msg.length;i++) {
+                    if (msg[i].pay_status == "已缴费") {
+                        paidItems.push(msg[i])
+                    }else if (msg[i].pay_status == "未缴费") {
+                        unPaidItems.push(msg[i])
+                    }
+                    allPaidItems.push(msg[i])
+                }
             },
             error: function () {
                 alert("与服务器失去连接");
             }
         })
-
-        var pageItems = [
-            {room:'202',mouth:"2018-11-01",water:25,electric:12,status:"已缴费"},
-            {room:'202',mouth:"2018-11-02",water:26,electric:14,status:"未缴费"},
-            {room:'203',mouth:"2018-11-02",water:26,electric:14,status:"未缴费"}
-        ]
-        var items= new Vue({
+        
+        var items = new Vue({
             el: '#items-manager',
            data: {
-                pageItems:pageItems
+                pageItems:unPaidItems
             }
         });
         function checkAll() {
@@ -246,11 +304,69 @@
             var validation = Array.prototype.filter.call(forms, function (form) {
                 form.classList.remove('was-validated');
             });
-            var total = pageItems[itemIndex].water+pageItems[itemIndex].electric
-            $('#modal-title').text(pageItems[itemIndex].mouth+"账单");
+            itemsIndex = itemIndex;
+            var total = pageItems[itemIndex].water_fee+pageItems[itemIndex].electric_fee
+            $('#modal-title').text(pageItems[itemIndex].fee_date+"账单");
             $('#total').text(total);
             $('#item-modal').modal('show');
         }
+
+        $("#save").click(function () {
+            $.ajax({
+                url: "/pay",
+                type: "GET",
+                data:{
+                    "id":pageItems[itemsIndex].id,
+                },
+                success: function(data){
+                    pageItems[itemsIndex].pay_status = "已缴费"
+                },
+                error: function () {
+                    alert("与服务器失去连接");
+                }
+            });
+            hideItemModal();
+            showMessageModal("成功", "支付成功！", "modal-success");
+        });
+
+        function showMessageModal(title, content, typeClass) {
+            $('#message-modal-title').text(title);
+            $('#message-modal-content').text(content);
+            $('#message-modal .modal-dialog').removeClass('modal-primary');
+            $('#message-modal .modal-dialog').removeClass('modal-success');
+            $('#message-modal .modal-dialog').removeClass('modal-warning');
+            $('#message-modal .modal-dialog').removeClass('modal-danger');
+            $('#message-modal .modal-dialog').removeClass('modal-info');
+            if ("modal-primary" === typeClass) {
+                $('#message-modal .modal-dialog').addClass('modal-primary');
+            }
+            if ("modal-success" === typeClass) {
+                $('#message-modal .modal-dialog').addClass('modal-success');
+            }
+            if ("modal-warning" === typeClass) {
+                $('#message-modal .modal-dialog').addClass('modal-warning');
+            }
+            if ("modal-danger" === typeClass) {
+                $('#message-modal .modal-dialog').addClass('modal-danger');
+            }
+            if ("modal-info" === typeClass) {
+                $('#message-modal .modal-dialog').addClass('modal-info');
+            }
+            $('#message-modal').modal('show');
+        }
+        function hideItemModal() {
+            $('#item-modal').modal('hide');
+        }
+
+        $("#paid").click(function (){
+            items.$data
+        });
+        $("#unpaid").click(function (){
+
+        });
+        $("#allpaid").click(function (){
+
+        });
     </script>
   </body>
 </html>

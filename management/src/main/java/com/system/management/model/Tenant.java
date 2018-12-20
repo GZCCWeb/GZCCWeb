@@ -1,6 +1,6 @@
 package com.system.management.model;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class Tenant {
     private int id;
