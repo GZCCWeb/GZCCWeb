@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.sql.Date;
+
 @Controller
 public class TenantController {
 
@@ -27,14 +29,15 @@ public class TenantController {
     }
 
     /**
-     * 支付账单操作
+     * 支付账单
      * @param id
+     * @param pay_date
      * @return
      */
     @RequestMapping(value = "/pay")
     @ResponseBody
-    public int payBill(@RequestParam Integer id) {
-        int msg = tenantMapper.payByID(id);
+    public int payBill(@RequestParam Integer id, @RequestParam Date pay_date) {
+        int msg = tenantMapper.payByID(id,pay_date);
         return msg;
     }
 }
