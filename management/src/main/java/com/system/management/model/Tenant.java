@@ -3,6 +3,7 @@ package com.system.management.model;
 import java.sql.Date;
 
 public class Tenant {
+    
     private int id;
     private int room_id;
     private int water_fee;

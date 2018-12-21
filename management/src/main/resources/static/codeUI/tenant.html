@@ -118,7 +118,7 @@
                     </ul>
                     <div class="tab-content">
                         <!--main-table-->
-                        <div class="card" id="items-manager">
+                        <div class="card" id="items-manager" style="margin: 0px">
                             <div class="card-header">
                                 <i class="icon-people icons"></i> 水电费
                             </div>
@@ -173,23 +173,29 @@
                             </div>
                         </div>
                         <!--<div class="tab-pane" id="paid" role="tabpanel">1</div>-->
-                        <div class="tab-pane active show" id="unpaid-tips" role="tabpanel">
-                            <div class="alert alert-success" role="alert"  v-if="count==0">已支付所有账单！</div>
-                            <div class="alert alert-warning" role="alert"  v-if="count>0">还有<strong>{{count}}</strong>账单未支付！</div>
+                        <div class="tab-pane active show" id="unpaid-tips" role="tabpanel" style="padding: 0px;margin: 5px">
+                            <div class="alert alert-success" role="alert" style="margin: 0px" v-if="count==0">已支付所有账单！</div>
                         </div>
                         <!--<div class="tab-pane" id="all" role="tabpanel">3</div>-->
                     </div>
 
                 </div>
+                <div class="alert alert-secondary" role="alert" style="padding: 5px;margin: 0px">
+                    <button class="btn btn-info" type="button" data-toggle="modal" data-target="#comment-modal">评论</button>
+                        <div class="panel panel-default" style="margin-top: 10px;">
+                            <div class="panel-body" id="commentItems">
+                                <ul id="comment" style="overflow-y: hidden; height: 30px;padding-left: 0px;margin: 0px">
+                                    <li class="comment-item" v-for="todo in todos">
+                                        {{todo.username}}：{{ todo.text }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+            </div>
             </div>
         </main>
-        <!--<div class="alert alert-secondary" role="alert">-->
-            <!--<ul class="demo1 nav nav-tabs nav-stacked">          -->
-                <!--<li data-toggle="tab">大家好我是李灏淳</li>          -->
-                <!--<li data-toggle="tab">大家好我是郑泽锐</li>            -->
-                <!--<li data-toggle="tab">大家灏我是陈俊朗</li>           -->
-            <!--</ul>-->
-        <!--</div>-->
+
+
     </div>
 
     <div class="modal " id="message-modal" tabindex="-1" role="dialog"
@@ -243,6 +249,34 @@
         <!-- /.modal-dialog -->
     </div>
 
+    <div class="modal " id="comment-modal" data-backdrop="static" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-primary" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">评论</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="needs-validation">
+                        <div class="modal-body font-weight-bold">
+                            <textarea class="form-control" rows="3" id="comment-text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="saveComment" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
     <footer class="app-footer">
       <div>
         <a href="https://coreui.io">CoreUI</a>
@@ -253,7 +287,13 @@
         <a href="https://coreui.io">CoreUI</a>
       </div>
     </footer>
-
+    <style>
+        .comment-item{
+            height: 50px;
+            list-style:none;
+            line-height: 100%;
+        }
+    </style>
     <!-- CoreUI and necessary plugins-->
     <script src="vendors/jquery/js/jquery.min.js"></script>
     <script src="vendors/jquery/js/jquery.bootstrap.newsbox.min.js"></script>
@@ -264,24 +304,15 @@
     <script src="vendors/@coreui/coreui/js/coreui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
     <script>
-        // $(".demo1").bootstrapNews({
-        //     newsPerPage: 1,  //一个页面显示的新闻条数
-        //     autoplay: true,   //是否自动播放
-        //     navigation: true,  //是否为导航模式,也就是下面是否有上一页下一页的按钮
-        //     pauseOnHover:true,  //是否鼠标滑过暂停滚动
-        //     direction: 'up',    //方向
-        //     newsTickerInterval: 2000,   //每隔几秒切换下一条
-        //     onToDo: function () {   //回调函数
-        //         //console.log(this);
-        //     }
-        // });
+
         var pageItems = [];
         var paidItems = [];
         var unPaidItems = [];
         var allPaidItems = [];
+        var commentItems = [];
         var billcount = {count:0};
         var itemsIndex = -1;
-        var user = {"room_id":"202"}
+        var user = {"room_id":"206","username":"李灏淳"}
 
         $.ajax({
             url: "/bill",
@@ -299,13 +330,52 @@
                     }
                     allPaidItems.push(msg[i])
                 }
+                $("#comment").bootstrapNews({
+                    newsPerPage: 1,  //一个页面显示的新闻条数
+                    autoplay: true,   //是否自动播放
+                    navigation: false,  //是否为导航模式,也就是下面是否有上一页下一页的按钮
+                    pauseOnHover:false,  //是否鼠标滑过暂停滚动
+                    direction: 'up',    //方向
+                    newsTickerInterval: 2000,   //每隔几秒切换下一条
+                    onToDo: function () {   //回调函数
+                        //console.log(this);
+                    }
+                });
             },
             error: function () {
                 alert("与服务器失去连接");
             }
         })
-
-
+        $.ajax({
+            url: "/comment",
+            type: "GET",
+            dataType: "json",//表示返回的格式是json
+            success: function (msg) {
+                for (var i=0;i<msg.length;i++) {
+                    commentItems.push(msg[i])
+                }
+            },
+            error: function () {
+                alert("与服务器失去连接");
+            }
+        })
+        $("#comment").bootstrapNews({
+            newsPerPage: 1,  //一个页面显示的新闻条数
+            autoplay: true,   //是否自动播放
+            navigation: false,  //是否为导航模式,也就是下面是否有上一页下一页的按钮
+            pauseOnHover:false,  //是否鼠标滑过暂停滚动
+            direction: 'up',    //方向
+            newsTickerInterval: 2000,   //每隔几秒切换下一条
+            onToDo: function () {   //回调函数
+                //console.log(this);
+            }
+        });
+        var comment = new Vue({
+            el: '#commentItems',
+            data: {
+                todos: commentItems
+            }
+        })
         var billnumber = new Vue({
             el: '#bill-number',
             data: billcount
@@ -366,6 +436,25 @@
             showMessageModal("成功", "支付成功！", "modal-success");
         });
 
+        $("#saveComment").click(function () {
+            $.ajax({
+                url: "/comment/save",
+                type: "GET",
+                data:{
+                    "username":user.username,
+                    "text":$('#comment-text').val()
+                },
+                success: function(data){
+
+                },
+                error: function () {
+                    showMessageModal("失败", "支付失败！", "modal-danger");
+                }
+            });
+            hideCommentModal();
+            showMessageModal("成功", "保存成功！", "modal-success");
+        });
+
         function showMessageModal(title, content, typeClass) {
             $('#message-modal-title').text(title);
             $('#message-modal-content').text(content);
@@ -394,7 +483,9 @@
         function hideItemModal() {
             $('#item-modal').modal('hide');
         }
-
+        function hideCommentModal() {
+            $('#comment-modal').modal('hide');
+        }
         function getNowFormatDate() {
             var date = new Date();
             var seperator1 = "-";

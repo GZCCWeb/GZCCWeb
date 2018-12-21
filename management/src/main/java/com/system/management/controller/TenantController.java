@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.sql.Date;
+import java.util.List;
 
 @Controller
 public class TenantController {
@@ -23,8 +24,8 @@ public class TenantController {
      */
     @RequestMapping(value = "/bill")
     @ResponseBody
-    public Tenant[] getBill(@RequestParam Integer room_id) {
-        Tenant[] msg = tenantMapper.selectByRoomID(room_id);
+    public List<Tenant> getBill(@RequestParam Integer room_id) {
+        List<Tenant> msg = tenantMapper.getBillByRoomId(room_id);
         return msg;
     }
 
