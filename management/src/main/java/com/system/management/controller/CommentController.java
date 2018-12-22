@@ -33,7 +33,7 @@ public class CommentController {
     @RequestMapping(value = "/comment/save")
     @ResponseBody
     public int saveComment(@RequestParam String username,@RequestParam String text) {
-        int msg = commentMapper.saveComment(username,text,0);
-        return 0;
+        int msg = commentMapper.saveComment(username,text);
+        return msg;
     }
 }

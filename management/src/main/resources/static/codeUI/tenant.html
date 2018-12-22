@@ -173,25 +173,27 @@
                             </div>
                         </div>
                         <!--<div class="tab-pane" id="paid" role="tabpanel">1</div>-->
-                        <div class="tab-pane active show" id="unpaid-tips" role="tabpanel" style="padding: 0px;margin: 5px">
+                        <div class="tab-pane active show" id="unpaid-tips" role="tabpanel" style="padding: 0px;margin-bottom: 0px;">
                             <div class="alert alert-success" role="alert" style="margin: 0px" v-if="count==0">已支付所有账单！</div>
                         </div>
                         <!--<div class="tab-pane" id="all" role="tabpanel">3</div>-->
                     </div>
 
                 </div>
-                <div class="alert alert-secondary" role="alert" style="padding: 5px;margin: 0px">
-                    <button class="btn btn-info" type="button" data-toggle="modal" data-target="#comment-modal">评论</button>
-                        <div class="panel panel-default" style="margin-top: 10px;">
-                            <div class="panel-body" id="commentItems">
-                                <ul id="comment" style="overflow-y: hidden; height: 30px;padding-left: 0px;margin: 0px">
-                                    <li class="comment-item" v-for="todo in todos">
-                                        {{todo.username}}：{{ todo.text }}
-                                    </li>
-                                </ul>
-                            </div>
+
+                <div class="alert alert-secondary" role="alert" style="padding: 5px;margin-top: 50px;margin-bottom: 5px">
+                    <div class="panel panel-default" style="margin-top: 10px;">
+                        <div class="panel-body" id="commentItems">
+                            <ul id="comment" style="overflow-y: hidden; height: 30px;padding-left: 0px;margin: 0px">
+                                <li class="comment-item" v-for="todo in todos">
+                                    {{todo.username}}：{{ todo.text }}
+                                </li>
+                            </ul>
                         </div>
-            </div>
+                    </div>
+                </div>
+                <button class="btn btn-info" type="button" data-toggle="modal" data-target="#comment-modal">评论</button>
+                <button class="btn btn-light" type="button" id="refresh-comment">刷新</button>
             </div>
         </main>
 
@@ -317,6 +319,7 @@
         $.ajax({
             url: "/bill",
             type: "GET",
+            async:true,
             data: user,
             dataType: "json",//表示返回的格式是json
             success: function (msg) {
@@ -349,6 +352,7 @@
         $.ajax({
             url: "/comment",
             type: "GET",
+            async:true,
             dataType: "json",//表示返回的格式是json
             success: function (msg) {
                 for (var i=0;i<msg.length;i++) {
@@ -356,9 +360,44 @@
                 }
             },
             error: function () {
-                alert("与服务器失去连接");
+                alert("与服务器失去连接comment");
             }
         })
+
+        //setInterval("getComment()",5000);
+        // function getComment(){
+        //     $.ajax({
+        //         url: "/comment",
+        //         type: "GET",
+        //         async:true,
+        //         dataType: "json",//表示返回的格式是json
+        //         success: function (msg) {
+        //             for (var i=0;i<msg.length;i++) {
+        //                 commentItems.splice(i,1,msg[i])
+        //             }
+        //         },
+        //         error: function () {
+        //             //alert("与服务器失去连接");
+        //         }
+        //     })
+
+        $("#refresh-comment").click(function (){
+            $.ajax({
+                url: "/comment",
+                type: "GET",
+                async:true,
+                dataType: "json",//表示返回的格式是json
+                success: function (msg) {
+                    for (var i=0;i<msg.length;i++) {
+                        commentItems.splice(i,1,msg[i])
+                    }
+                },
+                error: function () {
+                    //alert("与服务器失去连接");
+                }
+            })
+        })
+
         $("#comment").bootstrapNews({
             newsPerPage: 1,  //一个页面显示的新闻条数
             autoplay: true,   //是否自动播放
@@ -413,6 +452,7 @@
             $('#item-modal').modal('show');
         }
 
+        //保存支付信息
         $("#save").click(function () {
             $.ajax({
                 url: "/pay",
@@ -436,6 +476,7 @@
             showMessageModal("成功", "支付成功！", "modal-success");
         });
 
+        //保存评论
         $("#saveComment").click(function () {
             $.ajax({
                 url: "/comment/save",
@@ -445,7 +486,20 @@
                     "text":$('#comment-text').val()
                 },
                 success: function(data){
-
+                    $.ajax({
+                        url: "/comment",
+                        type: "GET",
+                        async:true,
+                        dataType: "json",//表示返回的格式是json
+                        success: function (msg) {
+                            for (var i=0;i<msg.length;i++) {
+                                commentItems.splice(i,1,msg[i])
+                            }
+                        },
+                        error: function () {
+                            //alert("与服务器失去连接");
+                        }
+                    })
                 },
                 error: function () {
                     showMessageModal("失败", "支付失败！", "modal-danger");
