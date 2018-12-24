@@ -8,8 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class ForwordController {
-    @RequestMapping(value = "/user/login")
-    public String loginView() {
-        return "login";
+    @RequestMapping("/404")
+    public String error404() {
+        return "404";
+    }
+
+    /**
+     * 500 error
+     * @return
+     */
+    @RequestMapping("/500")
+    public String error500() {
+        return "500";
     }
 }

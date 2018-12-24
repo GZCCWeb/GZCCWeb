@@ -67,7 +67,6 @@ public class UserController {
         if(userService.checkIdNumberChange(user)==false){
             System.out.println("ID没有被修改");
             userService.update(user);
-
         }else if(userService.checkIdNumberUnique(user)==true){
             System.out.println("ID修改了但数据库没有这个ID");
             userService.update(user);
@@ -76,5 +75,4 @@ public class UserController {
         }
         return user;
     }
-
 }
