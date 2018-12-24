@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.system.management.dao.TenantMapper" >
+    <resultMap id="tenantList" type="com.system.management.model.Tenant" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="room_id" property="room_id" jdbcType="INTEGER" />
+        <result column="fee_date" property="fee_date" jdbcType="VARCHAR" />
+        <result column="pay_date" property="pay_date" jdbcType="VARCHAR" />
+        <result column="water_fee" property="water_fee" jdbcType="DOUBLE" />
+        <result column="electric_fee" property="electric_fee" jdbcType="DOUBLE" />
+        <result column="pay_status" property="pay_status" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="getBillByRoomId" parameterType="int" resultMap="tenantList">
+      SELECT * FROM utilities WHERE room_id = #{room_id}
+    </select>
+
+    <update id="payByID">
+      UPDATE utilities set
+       pay_status='已缴费',
+       pay_date = #{pay_date}
+      WHERE id = #{id}
+    </update>
+</mapper>
