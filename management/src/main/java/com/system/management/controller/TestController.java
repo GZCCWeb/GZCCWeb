@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *  测试环境是否搭建完好类
+ *  测试
  */
 @Controller
 @ResponseBody

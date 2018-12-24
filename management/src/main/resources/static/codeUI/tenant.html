@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<!--
+* CoreUI - Free Bootstrap Admin Template
+* @version v2.0.0
+* @link https://coreui.io
+* Copyright (c) 2018 creativeLabs Łukasz Holeczek
+* Licensed under MIT (https://coreui.io/license)
+-->
+
+<html lang="ZN">
+  <head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
+    <meta name="author" content="Łukasz Holeczek">
+    <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
+    <title>CoreUI Free Bootstrap Admin Template</title>
+    <!-- Icons-->
+    <link href="vendors/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="vendors/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+    <link href="vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="vendors/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <!-- Main styles for this application-->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="vendors/pace-progress/css/pace.min.css" rel="stylesheet">
+  </head>
+  <body class="app header-fixed  sidebar-close aside-menu-fixed">
+    <header class="app-header navbar">
+      <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img class="navbar-brand-full" src="img/brand/logo.svg" width="89" height="25" alt="CoreUI Logo">
+        <img class="navbar-brand-minimized" src="img/brand/sygnet.svg" width="30" height="30" alt="CoreUI Logo">
+      </a>
+      <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <ul class="nav navbar-nav d-md-down-none">
+        <li class="nav-item px-3">
+          <a class="nav-link" href="#">Dashboard</a>
+        </li>
+        <li class="nav-item px-3">
+          <a class="nav-link" href="#">Users</a>
+        </li>
+        <li class="nav-item px-3">
+          <a class="nav-link" href="#">Settings</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item d-md-down-none">
+          <a class="nav-link" href="#">
+            <i class="icon-bell"></i>
+            <span class="badge badge-pill badge-danger">5</span>
+          </a>
+        </li>
+        <li class="nav-item d-md-down-none">
+          <a class="nav-link" href="#">
+            <i class="icon-list"></i>
+          </a>
+        </li>
+        <li class="nav-item d-md-down-none">
+          <a class="nav-link" href="#">
+            <i class="icon-location-pin"></i>
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <img class="img-avatar" src="img/avatars/6.jpg" alt="admin@bootstrapmaster.com">
+          </a>
+        </li>
+      </ul>
+      <button class="navbar-toggler aside-menu-toggler d-md-down-none" type="button" data-toggle="aside-menu-lg-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <button class="navbar-toggler aside-menu-toggler d-lg-none" type="button" data-toggle="aside-menu-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </header>
+
+    <div class="app-body">
+        <main class="main">
+            <!-- Breadcrumb -->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">首页</li>
+                <li class="breadcrumb-item active">账单</li>
+
+                <!-- Breadcrumb Menu-->
+                <li class="breadcrumb-menu d-md-down-none">
+                    <div class="btn-group" role="group" aria-label="Button group">
+                        <!--<a class="btn" href="/user"><i-->
+                            <!--class="fa fa-user-secret"></i>新增</a>-->
+                    </div>
+                </li>
+            </ol>
+
+            <!--main content-->
+            <div class="container">
+                <div class="animated fadeIn">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" >
+                            <a id="paid" class="nav-link" data-toggle="tab" href="#paid" role="tab" aria-controls="paid" aria-selected="false">
+                                <i class="icon-calculator"></i> 已支付
+                            </a>
+                        </li>
+                        <li class="nav-item" >
+                            <a id="unpaid" class="nav-link active show" data-toggle="tab" href="#unpaidtips" role="tab" aria-controls="unpaidtips" aria-selected="true">
+                                <i class="icon-basket-loaded"></i> 未支付
+                                <span class="badge badge-pill badge-danger" id="bill-number">{{count}}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item" >
+                            <a id="allpaid" class="nav-link" data-toggle="tab" href="#allpaid" role="tab" aria-controls="allpaid">
+                                <i class="icon-pie-chart"></i> 全部</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <!--main-table-->
+                        <div class="card" id="items-manager" style="margin: 0px">
+                            <div class="card-header">
+                                <i class="icon-people icons"></i> 水电费
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-responsive-sm table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th class="">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" onclick="checkAll();"
+                                                       id="checkAll" value="all"/>
+                                                <label class="form-check-label" for="checkAll"></label>
+                                            </div>
+                                        </th>
+                                        <th>房间号</th>
+                                        <th>月份</th>
+                                        <th>应缴水费</th>
+                                        <th>应缴电费</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!--vue语法，模板定义-->
+                                    <tr v-for="(item, index) in pageItems">
+                                        <td>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" v-bind:id="'item-' + index"
+                                                       v-bind:value="index"/>#{{index+1}}
+                                                <label class="form-check-label" v-bind:for="'item-' + index"></label>
+                                            </div>
+                                        </td>
+                                        <td>{{ item.room_id }}</td>
+                                        <td>{{ item.fee_date }}</td>
+                                        <td>{{ item.water_fee }}</td>
+                                        <td>{{ item.electric_fee }}</td>
+                                        <td>
+                                            <span class="badge badge-success" v-if="item.pay_status=='已缴费'">{{ item.pay_status }}</span>
+                                            <span class="badge badge-danger" v-if="item.pay_status=='未缴费'">{{ item.pay_status }}</span>
+                                        </td>
+
+                                        <td>
+                                            <a class="btn btn-success" v-bind:href="'javascript:loadItemModal('+index+')'" v-if="item.pay_status=='未缴费'">
+                                                <i class="fa fa-edit"></i>&nbsp;支付</a>
+                                            <a class="btn btn-primary disabled" v-bind:href="'javascript:loadItemModal('+index+')'" v-if="item.pay_status=='已缴费'" >
+                                                已支付</a>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!--<div class="tab-pane" id="paid" role="tabpanel">1</div>-->
+                        <div class="tab-pane active show" id="unpaid-tips" role="tabpanel" style="padding: 0px;margin-bottom: 0px;">
+                            <div class="alert alert-success" role="alert" style="margin: 0px" v-if="count==0">已支付所有账单！</div>
+                        </div>
+                        <!--<div class="tab-pane" id="all" role="tabpanel">3</div>-->
+                    </div>
+
+                </div>
+
+                <div class="alert alert-secondary" role="alert" style="padding: 5px;margin-top: 50px;margin-bottom: 5px">
+                    <div class="panel panel-default" style="margin-top: 10px;">
+                        <div class="panel-body" id="commentItems">
+                            <ul id="comment" style="overflow-y: hidden; height: 30px;padding-left: 0px;margin: 0px">
+                                <li class="comment-item" v-for="todo in todos">
+                                    {{todo.username}}：{{ todo.text }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-info" type="button" data-toggle="modal" data-target="#comment-modal">评论</button>
+                <button class="btn btn-light" type="button" id="refresh-comment">刷新</button>
+            </div>
+        </main>
+
+
+    </div>
+
+    <div class="modal " id="message-modal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog  modal-danger" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="message-modal-title">信息</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body font-weight-bold" id="message-modal-content">
+                    显示信息！
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal " id="item-modal" data-backdrop="static" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-primary" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal-title">确认支付</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-content">
+                    <form class="needs-validation" id="item-form">
+                        <div class="modal-body font-weight-bold" id="confirm-modal-content">
+                            <h5>共需要支付<strong id="total" style="color: red">0</strong>元</h5>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="save" class="btn btn-primary">确认支付</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <div class="modal " id="comment-modal" data-backdrop="static" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-primary" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">评论</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="needs-validation">
+                        <div class="modal-body font-weight-bold">
+                            <textarea class="form-control" rows="3" id="comment-text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="saveComment" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <footer class="app-footer">
+      <div>
+        <a href="https://coreui.io">CoreUI</a>
+        <span>&copy; 2018 creativeLabs.</span>
+      </div>
+      <div class="ml-auto">
+        <span>Powered by</span>
+        <a href="https://coreui.io">CoreUI</a>
+      </div>
+    </footer>
+    <style>
+        .comment-item{
+            height: 50px;
+            list-style:none;
+            line-height: 100%;
+        }
+    </style>
+    <!-- CoreUI and necessary plugins-->
+    <script src="vendors/jquery/js/jquery.min.js"></script>
+    <script src="vendors/jquery/js/jquery.bootstrap.newsbox.min.js"></script>
+    <script src="vendors/popper.js/js/popper.min.js"></script>
+    <script src="vendors/bootstrap/js/bootstrap.min.js"></script>
+    <script src="vendors/pace-progress/js/pace.min.js"></script>
+    <script src="vendors/perfect-scrollbar/js/perfect-scrollbar.min.js"></script>
+    <script src="vendors/@coreui/coreui/js/coreui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script>
+
+        var pageItems = [];
+        var paidItems = [];
+        var unPaidItems = [];
+        var allPaidItems = [];
+        var commentItems = [];
+        var billcount = {count:0};
+        var itemsIndex = -1;
+        var user = {"room_id":"206","username":"李灏淳"}
+
+        $.ajax({
+            url: "/bill",
+            type: "GET",
+            async:true,
+            data: user,
+            dataType: "json",//表示返回的格式是json
+            success: function (msg) {
+                for (var i=0;i<msg.length;i++) {
+                    if (msg[i].pay_status == "已缴费") {
+                        paidItems.push(msg[i])
+                    }else if (msg[i].pay_status == "未缴费") {
+                        unPaidItems.push(msg[i])
+                        billcount.count++;
+                        pageItems.push(msg[i])
+                    }
+                    allPaidItems.push(msg[i])
+                }
+                $("#comment").bootstrapNews({
+                    newsPerPage: 1,  //一个页面显示的新闻条数
+                    autoplay: true,   //是否自动播放
+                    navigation: false,  //是否为导航模式,也就是下面是否有上一页下一页的按钮
+                    pauseOnHover:false,  //是否鼠标滑过暂停滚动
+                    direction: 'up',    //方向
+                    newsTickerInterval: 2000,   //每隔几秒切换下一条
+                    onToDo: function () {   //回调函数
+                        //console.log(this);
+                    }
+                });
+            },
+            error: function () {
+                alert("与服务器失去连接");
+            }
+        })
+        $.ajax({
+            url: "/comment",
+            type: "GET",
+            async:true,
+            dataType: "json",//表示返回的格式是json
+            success: function (msg) {
+                for (var i=0;i<msg.length;i++) {
+                    commentItems.push(msg[i])
+                }
+            },
+            error: function () {
+                alert("与服务器失去连接comment");
+            }
+        })
+
+        //setInterval("getComment()",5000);
+        // function getComment(){
+        //     $.ajax({
+        //         url: "/comment",
+        //         type: "GET",
+        //         async:true,
+        //         dataType: "json",//表示返回的格式是json
+        //         success: function (msg) {
+        //             for (var i=0;i<msg.length;i++) {
+        //                 commentItems.splice(i,1,msg[i])
+        //             }
+        //         },
+        //         error: function () {
+        //             //alert("与服务器失去连接");
+        //         }
+        //     })
+
+        $("#refresh-comment").click(function (){
+            $.ajax({
+                url: "/comment",
+                type: "GET",
+                async:true,
+                dataType: "json",//表示返回的格式是json
+                success: function (msg) {
+                    for (var i=0;i<msg.length;i++) {
+                        commentItems.splice(i,1,msg[i])
+                    }
+                },
+                error: function () {
+                    //alert("与服务器失去连接");
+                }
+            })
+        })
+
+        $("#comment").bootstrapNews({
+            newsPerPage: 1,  //一个页面显示的新闻条数
+            autoplay: true,   //是否自动播放
+            navigation: false,  //是否为导航模式,也就是下面是否有上一页下一页的按钮
+            pauseOnHover:false,  //是否鼠标滑过暂停滚动
+            direction: 'up',    //方向
+            newsTickerInterval: 2000,   //每隔几秒切换下一条
+            onToDo: function () {   //回调函数
+                //console.log(this);
+            }
+        });
+        var comment = new Vue({
+            el: '#commentItems',
+            data: {
+                todos: commentItems
+            }
+        })
+        var billnumber = new Vue({
+            el: '#bill-number',
+            data: billcount
+        });
+        var billtips = new Vue({
+            el: '#unpaid-tips',
+            data: billcount
+        });
+        var items = new Vue({
+            el: '#items-manager',
+           data: {
+                pageItems:pageItems
+            }
+        });
+        function checkAll() {
+            var selected = $('#checkAll').get(0).checked;
+            var i = 0;
+
+            $.each($("#items-manager table tbody input[type=checkbox]"), function (index, element) {
+                this.checked = selected;
+                return;
+            });
+
+        }
+        function loadItemModal(itemIndex) {
+            //还原表单为未检查状态（之前的操作后的表单状态会保留需要还原）
+            var forms = document.getElementsByClassName('needs-validation');
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.classList.remove('was-validated');
+            });
+            itemsIndex = itemIndex;
+            var total = pageItems[itemIndex].water_fee+pageItems[itemIndex].electric_fee
+            $('#modal-title').text(pageItems[itemIndex].fee_date+"账单");
+            $('#total').text(total);
+            $('#item-modal').modal('show');
+        }
+
+        //保存支付信息
+        $("#save").click(function () {
+            $.ajax({
+                url: "/pay",
+                type: "GET",
+                data:{
+                    "id":pageItems[itemsIndex].id,
+                    "pay_date":getNowFormatDate()
+                },
+                success: function(data){
+                    pageItems[itemsIndex].pay_status = "已缴费"
+                    paidItems.splice(0,0,pageItems[itemsIndex])
+                    unPaidItems.splice(itemsIndex,1)
+                    pageItems.splice(itemsIndex,1)
+                    billcount.count--;
+                },
+                error: function () {
+                    showMessageModal("失败", "支付失败！", "modal-danger");
+                }
+            });
+            hideItemModal();
+            showMessageModal("成功", "支付成功！", "modal-success");
+        });
+
+        //保存评论
+        $("#saveComment").click(function () {
+            $.ajax({
+                url: "/comment/save",
+                type: "GET",
+                data:{
+                    "username":user.username,
+                    "text":$('#comment-text').val()
+                },
+                success: function(data){
+                    $.ajax({
+                        url: "/comment",
+                        type: "GET",
+                        async:true,
+                        dataType: "json",//表示返回的格式是json
+                        success: function (msg) {
+                            for (var i=0;i<msg.length;i++) {
+                                commentItems.splice(i,1,msg[i])
+                            }
+                        },
+                        error: function () {
+                            //alert("与服务器失去连接");
+                        }
+                    })
+                },
+                error: function () {
+                    showMessageModal("失败", "支付失败！", "modal-danger");
+                }
+            });
+            hideCommentModal();
+            showMessageModal("成功", "保存成功！", "modal-success");
+        });
+
+        function showMessageModal(title, content, typeClass) {
+            $('#message-modal-title').text(title);
+            $('#message-modal-content').text(content);
+            $('#message-modal .modal-dialog').removeClass('modal-primary');
+            $('#message-modal .modal-dialog').removeClass('modal-success');
+            $('#message-modal .modal-dialog').removeClass('modal-warning');
+            $('#message-modal .modal-dialog').removeClass('modal-danger');
+            $('#message-modal .modal-dialog').removeClass('modal-info');
+            if ("modal-primary" === typeClass) {
+                $('#message-modal .modal-dialog').addClass('modal-primary');
+            }
+            if ("modal-success" === typeClass) {
+                $('#message-modal .modal-dialog').addClass('modal-success');
+            }
+            if ("modal-warning" === typeClass) {
+                $('#message-modal .modal-dialog').addClass('modal-warning');
+            }
+            if ("modal-danger" === typeClass) {
+                $('#message-modal .modal-dialog').addClass('modal-danger');
+            }
+            if ("modal-info" === typeClass) {
+                $('#message-modal .modal-dialog').addClass('modal-info');
+            }
+            $('#message-modal').modal('show');
+        }
+        function hideItemModal() {
+            $('#item-modal').modal('hide');
+        }
+        function hideCommentModal() {
+            $('#comment-modal').modal('hide');
+        }
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        }
+
+        $("#paid").click(function (){
+            if (pageItems.length >= paidItems.length){
+                for (var i=0;i<paidItems.length;i++) {
+                    pageItems.splice(i,1,paidItems[i])
+                }
+                pageItems.splice(paidItems.length,pageItems.length-paidItems.length)
+            }else if (pageItems.length < paidItems.length){
+                for (var i=0;i<pageItems.length;i++) {
+                    pageItems.splice(i,1,paidItems[i])
+                }
+                for (var i=pageItems.length;i<paidItems.length;i++) {
+                    pageItems.push(paidItems[i])
+                }
+            }
+        });
+        $("#unpaid").click(function (){
+            if (pageItems.length >= unPaidItems.length){
+                for (var i=0;i<unPaidItems.length;i++) {
+                    pageItems.splice(i,1,unPaidItems[i])
+                }
+                pageItems.splice(unPaidItems.length,pageItems.length-unPaidItems.length)
+            }else if (pageItems.length < unPaidItems.length){
+                for (var i=0;i<pageItems.length;i++) {
+                    pageItems.splice(i,1,unPaidItems[i])
+                }
+                for (var i=pageItems.length;i<unPaidItems.length;i++) {
+                    pageItems.push(unPaidItems[i])
+                }
+            }
+        });
+        $("#allpaid").click(function (){
+            for (var i=0;i<pageItems.length;i++) {
+                pageItems.splice(i,1,allPaidItems[i])
+            }
+            for (var i=pageItems.length;i<allPaidItems.length;i++) {
+                pageItems.push(allPaidItems[i])
+            }
+        });
+    </script>
+  </body>
+</html>
