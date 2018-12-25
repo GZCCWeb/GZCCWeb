@@ -3,7 +3,7 @@ package com.system.management.service.impl;
 import com.system.management.dao.UserMapper;
 import com.system.management.model.User;
 import com.system.management.service.UserService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+//import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<User> getAll() {
-        return userMapper.selectList(null);
+        return userMapper.selectList();
     }
 
 
@@ -30,13 +30,16 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User create(User user) {
-        userMapper.insert(user);
-        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
-        queryWrapper
-                .orderByDesc("id")
-                .last("LIMIT 1");
-        User userNew=userMapper.selectOne(queryWrapper);
-        return userNew;
+//        userMapper.insert(user);
+//        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+//        queryWrapper
+//                .orderByDesc("id")
+//                .last("LIMIT 1");
+//        User userNew=userMapper.selectOne(queryWrapper);
+
+        int num = userMapper.create(user);
+        //System.out.println(user.getId());
+        return user;
     }
 
 
@@ -64,34 +67,47 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Boolean checkIdNumberUnique(User user){
-        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
-        queryWrapper
-                .eq("id_number",user.getIdNumber());
-        User checkId=userMapper.selectOne(queryWrapper);
-        if(checkId==null){
+        if(userMapper.checkIdNumberUnique(user) == null){
             return true;
         }else{
             return false;
         }
+//        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+//        queryWrapper
+//                .eq("id_number",user.getIdNumber());
+//        User checkId=userMapper.selectOne(queryWrapper);
+//        if(checkId==null){
+//            return true;
+//        }else{
+//            return false;
+//        }
     }
 
     /**
      *检查身份证号是否被修改
      */
     @Override
-    public Boolean checkIdNumberChange(User user){
-        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
-        queryWrapper
-                .eq("id",user.getId())
-                .eq("id_number",user.getIdNumber());
-        User checkId=userMapper.selectOne(queryWrapper);
-        if (checkId==null){
+    public Boolean checkIdNumberChange(User user) {
+        if(userMapper.checkIdNumberChange(user) == null){
             return true;
-        }else{
+
+        }else {
             return false;
         }
 
+//        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+//        queryWrapper
+//                .eq("id",user.getId())
+//                .eq("id_number",user.getIdNumber());
+//        User checkId=userMapper.selectOne(queryWrapper);
+//        if (checkId==null){
+//            return true;
+//        }else{
+//            return false;
+//        }
+//        return false;
     }
+
 
 
 

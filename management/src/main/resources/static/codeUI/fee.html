@@ -7,7 +7,7 @@
 * Licensed under MIT (https://coreui.io/license)
 -->
 
-<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <base href="./">
     <meta charset="utf-8">
@@ -16,7 +16,7 @@
     <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
     <meta name="author" content="Łukasz Holeczek">
     <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-    <title>租客用户管理平台</title>
+    <title>水电费管理平台</title>
     <!-- Icons-->
     <link href="vendors/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
     <link href="vendors/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
@@ -25,210 +25,189 @@
     <!-- Main styles for this application-->
     <link href="css/style.css" rel="stylesheet">
     <link href="vendors/pace-progress/css/pace.min.css" rel="stylesheet">
-
 </head>
-<body class="app header-fixed sidebar-fixed aside-menu-fixed ">
-<ol class="breadcrumb">
-    <li class="breadcrumb-item">
-        <a href="#">首页</a>
-    </li>
-    <li class="breadcrumb-item active">租客用户管理</li>
-    <!-- Breadcrumb Menu-->
-    <li class="breadcrumb-menu d-md-down-none">
-
-    </li>
-</ol>
+<body class=" sidebar-fixed aside-menu-fixed !--sidebar-lg-show--">
 
 <div class="app-body">
     <main class="main">
-        <div class="modal fade show" id="primaryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog modal-primary" role="document">
-                <div class="modal-content">
-                    <form action="" method="post" class="needs-validation" novalidate>
+        <!-- Breadcrumb-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">首页</a></li>
+            <li class="breadcrumb-item">水电费管理</li>
+            <!--li class="breadcrumb-item active">用户管理</li-->
+            <!-- Breadcrumb Menu-->
+            <li class="breadcrumb-menu d-md-down-none">
+                <div class="btn-group" role="group" aria-label="Button group">
+                </div>
+            </li>
+        </ol>
+        <div class="col-lg-12">
+            <div class="card" id="name_table">
+                <div class="card-header">
+                    <table class="col-lg-12">
+                        <tr>
+                            <td><i class="fa fa-align-justify"></i> 水电费信息管理</td>
+                            <td align="right"><a class="card-header-action btn-setting" onclick="add()">
+                                <i class="icon-plus">新增</i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a
+                                    class="card-header-action btn-setting" onclick="selectDelete()"><i
+                                    class="icon-trash">删除</i></a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-body">
+                    <table class="table table-responsive-sm table-bordered">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" class="checkbox" onclick="selectAll();" id="selectAll"
+                                       value="selectAll"/>全选
+                            </th>
+                            <th>房间号</th>
+                            <th>每月水电费日期</th>
+                            <th>水费</th>
+                            <th>电费</th>
+                            <th>缴费日期</th>
+                            <th>缴费状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(item,index) in items">
+                            <td>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" v-bind:id="'item-'+index"
+                                           v-bind:value="index"/>#{{index+1}}
+                                    <label class="form-check-label" v-bind:for="'item-' + index"></label>
+                                </div>
+                            </td>
+                            <td>#{{ item.room_id }}</td>
+                            <td>{{ item.fee_date }}</td>
+                            <td>{{ item.water_fee }}</td>
+                            <td>{{ item.electric_fee }}</td>
+                            <td>{{ item.pay_date }}</td>
+                            <td>
+                                <span class="badge badge-success"
+                                      v-if="item.pay_status=='已缴费'">{{ item.pay_status }}</span>
+                                <span class="badge badge-danger"
+                                      v-if="item.pay_status=='未缴费'">{{ item.pay_status }}</span>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" type="button" aria-pressed="true" data-toggle="modal"
+                                        data-target="#primaryModal" v-bind:data-rowindex="index"
+                                        v-if="item.pay_status=='未缴费'"><i
+                                        class="fa fa-pencil-square-o"></i>编辑
+                                </button> &nbsp;&nbsp;
+                                <button class="btn btn-danger" type="button" aria-pressed="true" data-toggle="modal"
+                                        data-target="#dangerModal " v-bind:data-dangerrowindex="index"><i
+                                        class="fa fa-times  "></i>删除
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <!--div class="animated fadeIn"></div-->
+            <div tabindex="-1" class="modal fade show" id="dangerModal" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog modal-danger" role="document">
+                    <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">编辑</h4>
-                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <h4 class="modal-title">删除</h4>
+                            <button class="close" aria-label="Close" type="button" data-dismiss="modal">
                                 <span aria-hidden="true">×</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input id="index" type="hidden" />
-                                    <input class="form-control col-sm-6" id="username" type="text" name="username"
-                                           placeholder="用户名" required>
-                                    <span class="input-group-text">
-                                   <i class="fa fa-user"></i>
-                                   </span>
-                                    &nbsp; &nbsp;&nbsp; &nbsp;
-                                    <div class="form-control col-sm-4">
-                                        <text class="text-black-50" >性别</text>
-                                        &nbsp;&nbsp;
-                                        <div class="form-check form-check-inline mr-1">
-                                            <input class="form-check-input" name="sex" type="radio" value="男" checked="checked">
-                                            <label class="form-check-label" >男</label>
-                                        </div>
-                                        <div class="form-check form-check-inline mr-1">
-                                            <input class="form-check-input" name="sex" type="radio" value="女" >
-                                            <label class="form-check-label" >女</label>
-                                        </div>
-                                    </div>
-                                    <!--<input class="form-control" id="sex" type="text" name="sex"-->
-                                           <!--placeholder="性别" required>-->
-                                    <div class="input-group-append">
-                            <span class="input-group-text">
-                             <i class="fa fa-mars "></i>
-                            </span>
-                                    </div>
-                                </div>
-                                <p id="usernameError" style="color:red;display:none">&nbsp;&nbsp;用户名不能为空！</p>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group">
-                                        <input class="form-control " id="roomId" type="text" name="roomId"
-                                               placeholder="房间号" required>
-                                        <span class="input-group-text">
-                                  <i class="fa fa-institution "></i>
-                                   </span>
-                                </div>
-                                <p id="roomError" style="color:red;display:none">&nbsp;&nbsp;房间号不能为空！</p>
-                            </div>
-                            <div class="form-group">
-                                &nbsp;&nbsp;
-                                <text class="text-black-50" >注册时间</text>
-                                <input class="form-control" id="registerDatetime" type="date"
-                                       name="registerDatetime" placeholder="注册时间" required >
-                                <p id="registerDatetimeError" style="color:red;display:none">&nbsp;&nbsp;注册时间不能为空！</p>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input class="form-control" id="phoneNumber" type="text" name="phoneNumber" placeholder="手机号码"
-                                           required>
-                                    <div class="input-group-append">
-                            <span class="input-group-text">
-                              <i class="fa fa-phone-square "></i>
-                            </span>
-                                    </div>
-                                </div>
-                                <p id="phoneNumberError" style="color:red;display:none">&nbsp;&nbsp;手机号码格式异常！</p>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <input class="form-control" id="idNumber" type="text" name="idNumber" placeholder="身份证号码"
-                                           required>
-                                    <div class="input-group-append">
-                            <span class="input-group-text">
-                              <i class="fa fa-id-card "></i>
-                            </span>
-                                    </div>
-                                </div>
-                                <p id="idNumberError" style="color:red;display:none">&nbsp;&nbsp;身份证号码格式异常！</p>
-                                <p id="idNumberExist" style="color:red;display:none">&nbsp;&nbsp;该身份证号码已存在！</p>
-                            </div>
+
+                            <p><input id="dangerModal_Index" type="text" style="display:none" v-bind:value="index">是否确定删除？
+                            </p>
                         </div>
                         <div class="modal-footer">
-                            <button id="close" class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
-                            <button id="saveBtn" class="btn btn-primary" type="button" onclick="save()" >保存</button>
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
+                            <button class="btn btn-danger" type="button" onclick="delrow()">确定</button>
                         </div>
-                    </form>
+                    </div>
+                    <!-- /.modal-content-->
                 </div>
-                <!-- /.modal-content-->
+                <!-- /.modal-dialog-->
             </div>
-            <!-- /.modal-dialog-->
-        </div>
-        <div class="modal" id="confirm-modal" data-backdrop="static" tabindex="-1" role="dialog"
-             aria-labelledby="myModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog  modal-danger" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="confirm-modal-title">危险</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body font-weight-bold" id="confirm-modal-content">
-                        记录删除后将无法恢复!确定要删除吗？
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" id="delete" onclick="deleteById()">确定</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-
-        <div class="container-fluid">
-            <div class="animated fadeIn">
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fa fa-align-justify"></i> 租客表
-                        <button class="btn  btn-primary" type="button" data-toggle="modal"
-                                data-target="#primaryModal" aria-pressed="true" onclick="create()" style="display: inline-block;float: right">
-                            <i class="fa fa-plus-circle"></i>&nbsp;新增
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-responsive-sm table-bordered" id="usersTable">
-                            <thead>
-                            <tr>
-                                <th>序号</th>
-                                <th>姓名</th>
-                                <th>性别</th>
-                                <th>房间号</th>
-                                <th>注册时间</th>
-                                <th>联系电话</th>
-                                <th>身份证</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(item, index) in items">
-                                <td>{{index+1}}</td>
-                                <td>{{item.username}}</td>
-                                <td>{{item.sex}}</td>
-                                <td>{{item.room_id}}</td>
-                                <td>{{item.register_datetime}}</td>
-                                <td>{{item.phone_number}}</td>
-                                <td>
-                                    <span class="badge badge-success">{{item.id_number}}</span>
-                                </td>
-                                <td>
-                                    <button class="btn  btn-primary" type="button" data-toggle="modal"
-                                            data-target="#primaryModal" aria-pressed="true"
-                                            v-bind:data-rowIndex="index" onclick="update()"><i class="fa fa-edit"></i>&nbsp;编辑
-                                    </button>
-                                    &nbsp;
-                                    <button class="btn  btn-danger" type="button" data-toggle="modal"
-                                            data-target="#confirm-modal" aria-pressed="true"
-                                            v-bind:data-rowIndex="index" ><i class="fa fa-close"></i>&nbsp;删除
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <!--<ul class="pagination">-->
-                            <!--<li class="page-item">-->
-                                <!--<a class="page-link" href="#">Prev</a>-->
-                            <!--</li>-->
-                            <!--<li class="page-item active">-->
-                                <!--<a class="page-link" href="#">1</a>-->
-                            <!--</li>-->
-                            <!--<li class="page-item">-->
-                                <!--<a class="page-link" href="#">2</a>-->
-                            <!--</li>-->
-                            <!--<li class="page-item">-->
-                                <!--<a class="page-link" href="#">3</a>-->
-                            <!--</li>-->
-                            <!--<li class="page-item">-->
-                                <!--<a class="page-link" href="#">4</a>-->
-                            <!--</li>-->
-                            <!--<li class="page-item">-->
-                                <!--<a class="page-link" href="#">Next</a>-->
-                            <!--</li>-->
-                        <!--</ul>-->
+            <div tabindex="-1" class="modal fade show" id="primaryModal" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog modal-primary" role="document">
+                    <div class="modal-content">
+                        <form action="" method="post" class="needs-validation" id="modalForm" novalidate>
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="modal-title"> 编辑</h4>
+                                <button class="close" aria-label="Close" type="button" data-dismiss="modal">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <label for="room_id" class="col-sm-2 col-form-label">房间号</label>
+                                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                              <i class="fa fa-user"></i>
+                            </span>
+                                        </div>
+                                        <input id="index" type="text" style="display:none">
+                                        <input id="id" v-model="item.id" type="text" style="display:none">
+                                        <input class="form-control " id="room_id" v-model="item.room_id" type="text"
+                                               placeholder="房间号" required>
+                                        <div class="invalid-feedback ">房间号不能为空</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <label for="fee_date" class="col-sm-2 col-form-label">水电费日期</label>
+                                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                              <i class="fa fa-envelope"></i>
+                            </span>
+                                        </div>
+                                        <input class="form-control " id="fee_date" type="date" v-model="item.fee_date"
+                                               placeholder="每月水电费日期" required>
+                                        <div class="invalid-feedback">每月水电费日期不能为空</div>
+                                        <!--invalid-feedback非法显示，valid-feedback合法显示-->
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <label for="water_fee" class="col-sm-2 col-form-label">水费</label>
+                                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                              <i class="fa fa-envelope"></i>
+                            </span>
+                                        </div>
+                                        <input class="form-control " id="water_fee" v-model="item.water_fee"
+                                               placeholder="水费" required>
+                                        <div class="invalid-feedback">水费不能为空</div>
+                                        <!--invalid-feedback非法显示，valid-feedback合法显示-->
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <label for="electric_fee" class="col-sm-2 col-form-label">电费</label>
+                                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                              <i class="fa fa-envelope"></i>
+                            </span>
+                                        </div>
+                                        <input class="form-control " id="electric_fee" v-model="item.electric_fee"
+                                               placeholder="电费" required>
+                                        <div class="invalid-feedback">电费不能为空</div>
+                                        <!--invalid-feedback非法显示，valid-feedback合法显示-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">关闭</button>
+                                <button class="btn btn-danger" type="button" onclick="save()">保存修改</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -553,16 +532,6 @@
         </div>
     </aside>
 </div>
-<footer class="app-footer">
-    <div>
-        <a href="https://coreui.io">CoreUI</a>
-        <span>&copy; 2018 creativeLabs.</span>
-    </div>
-    <div class="ml-auto">
-        <span>Powered by</span>
-        <a href="https://coreui.io">CoreUI</a>
-    </div>
-</footer>
 
 <!-- CoreUI and necessary plugins-->
 <script src="vendors/jquery/js/jquery.min.js"></script>
@@ -572,175 +541,198 @@
 <script src="vendors/perfect-scrollbar/js/perfect-scrollbar.min.js"></script>
 <script src="vendors/@coreui/coreui/js/coreui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-
 <script>
-    var users = [ ];
+    var utilities;   //水电费
     var userTableVM;
-    var createNew;    //  =1新增 =0更新
-    var deleteIndex;  //要删除的下标
-    var isCheckForm;  //  =1验证通过 =0验证不通过
+    var deleteItemsIndex = [];  //复选框数组
 
-
-    function save(){
-        var username = $("#username").val();
-        var sex=$("input[name='sex']:checked").val();
-        var roomId=$("#roomId").val();
-        var registerDatetime=$("#registerDatetime").val();
-        var phoneNumber=$("#phoneNumber").val();
-        var idNumber=$("#idNumber").val();
-        checkForm();
-        if(isCheckForm==1){
-            if(createNew==1){
-                $.ajax({
-                    type: 'POST',
-                    url: "/users/create",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        username: username, sex: sex, room_id: roomId, register_datetime: registerDatetime,
-                        phone_number: phoneNumber, id_number: idNumber
-                    }),
-                    success: function (response) {
-                        var user = response;
-                        if(user.id!=0){
-                            users.push({
-                                id: user.id,
-                                username: user.username,
-                                sex: user.sex,
-                                room_id: user.room_id,
-                                register_datetime: user.register_datetime,
-                                phone_number: user.phone_number,
-                                id_number: user.id_number
-                        });
-                        }else{
-                            alert("无效的数据：该身份证号码已存在！");
-                        }
-                        return;
-                    }
-                });
-            }else{
-                var id=users[$("#index").val()].id;
-                $.ajax({
-                    type: 'POST',
-                    url: "/users/update",
-                    contentType:"application/json",
-                    data: JSON.stringify({id:id,username:username,sex:sex,room_id:roomId,register_datetime:registerDatetime,
-                        phone_number:phoneNumber,id_number:idNumber}),
-                    success: function (response) {
-                        var user=response;
-                        if(user.id==null){
-                            alert("无效的数据：该身份证号码已存在！");
-                        }else{
-                            users[$("#index").val()].username=user.username;
-                            users[$("#index").val()].sex=user.sex;
-                            users[$("#index").val()].room_id=user.room_id;
-                            users[$("#index").val()].register_datetime=user.register_datetime;
-                            users[$("#index").val()].phone_number=user.phone_number;
-                            users[$("#index").val()].id_number=user.id_number;
-                        }
-                        return;
-                    }
-                });
-            }
-            $('#primaryModal').modal('hide');
-        }
-
-    }
-    function create() {
-        createNew=1;
-    }
-    function update() {
-        createNew=0;
-    }
-    function deleteById(){
-        var id=users[deleteIndex].id;
-        $.ajax({
-            type: 'POST',
-            url: "/users/deleteById",
-            contentType:"application/json",
-            data: JSON.stringify({id:id}),
-            success: function (response) {
-                users.splice(deleteIndex,1);
-                return;
-            }
-        });
-    }
-    function checkForm(){
-        cleanFormError();
-        isCheckForm=1;
-        if ($("#username").val() == ""){
-            $("#usernameError").show();
-            isCheckForm=0;
-        }
-        if ($("#roomId").val() == ""){
-            $("#roomError").show();
-            isCheckForm=0;
-        }
-        if ($("#registerDatetime").val().length < 10){
-            $("#registerDatetimeError").show();
-            isCheckForm=0;
-        }
-        if ( ($("#phoneNumber").val() == "")  || ($("#phoneNumber").val().length!=11)  ){
-            $("#phoneNumberError").show();
-            isCheckForm=0;
-        }
-        if ( ($("#idNumber").val() == "") || ($("#idNumber").val().length!=18) ){
-            $("#idNumberError").show();
-            isCheckForm=0;
-        }
-    }
-    function cleanFormError(){
-            $("#usernameError").hide();
-            $("#roomError").hide();
-            $("#registerDatetimeError").hide();
-            $("#phoneNumberError").hide();
-            $("#idNumberError").hide();
-            $("#idNumberExist").hide();
-    }
+    //将全部水电费信息渲染到页面
     $(function () {
         $.ajax({
             type: 'GET',
-            url: "/users",
+            url: "http://localhost:9000/utilities",
             success: function (response) {
-                users = response;
+                utilities = response;
                 userTableVM = new Vue({
-                    el: '#usersTable',
-                    data: {
-                        items: users
-                    }
+                    el: '#name_table',
+                    data: {items: utilities}
                 });
                 return;
             }
         });
-        $('#primaryModal').on('show.bs.modal', function (e) {
-            var modal = $(this);
-            var button = $(e.relatedTarget) // Button that triggered the modal
-            var rowIndex = button.data('rowindex') // Extract info from data-* attributes
-            var user = users[rowIndex];
-            cleanFormError();
-            if(createNew==0){
-                // 把用户信息填进去
-                modal.find('.modal-body #index').val(rowIndex);
-                modal.find('.modal-body #username').val(user.username);
-                modal.find('.modal-body #sex').val(user.sex);
-                modal.find('.modal-body #roomId').val(user.room_id);
-                modal.find('.modal-body #registerDatetime').val(user.register_datetime);
-                modal.find('.modal-body #phoneNumber').val(user.phone_number);
-                modal.find('.modal-body #idNumber').val(user.id_number);
-                return;
-            }else{
-                modal.find('.modal-body #username').val("");
-                modal.find('.modal-body #sex').val("");
-                modal.find('.modal-body #roomId').val("");
-                modal.find('.modal-body #registerDatetime').val("");
-                modal.find('.modal-body #phoneNumber').val("");
-                modal.find('.modal-body #idNumber').val("");
-            }
-        });
-        $('#confirm-modal').on('show.bs.modal', function (e) {
-            var button = $(e.relatedTarget) // Button that triggered the modal
-            deleteIndex = button.data('rowindex') // Extract info from data-* attributes
-        });
     });
+
+    //全选
+    function selectAll() {
+        var selected = $('#selectAll').get(0).checked;
+        var i = 0;
+        $.each($("#name_table table tbody input[type=checkbox]"), function (index, element) {
+            this.checked = selected;
+        });
+    }
+
+    //删除一条或批量删除确认操作。
+    function delrow() {
+        var dangerModal_index = $("#dangerModal_Index").val();
+        deleteItemsIndex.length = 0;
+        //如果是表头删除，则获取删除条数
+        if (dangerModal_index == -1) {
+            //each() 方法规定为每个匹配元素规定运行的函数。返回索引值再返回值
+            // index - 选择器的 index 位置，索引值
+            // element - 当前的元素（也可使用 "this" 选择器）。
+            $.each($("#name_table table tbody input[type=checkbox]"), function (index, element) {
+                if (this.checked) {
+                    deleteItemsIndex.push(index);//push() 方法可向数组的末尾添加一个或多个元素，并返回新的长度。
+                }
+            });
+            //forEach():返回值再返回索引值
+            deleteItemsIndex.forEach(function (index) {
+                var id = utilities[index].id;
+                $.ajax({
+                    url: "http://localhost:9000/utilities/delete",
+                    data: {id: id},
+                    success: function (data) {
+                        utilities.splice(index,deleteItemsIndex.length);
+                    },
+                });
+            });
+            $('#selectAll').get(0).checked = false;
+            $.each($("#name_table table tbody input[type=checkbox]"), function (index, element) {
+                this.checked = false;
+            });
+        } else {
+            var id = utilities[dangerModal_index].id;
+            $.ajax({
+                url: "http://localhost:9000/utilities/delete",
+                data: {id: id},
+                success: function (data) {
+                    utilities.splice(dangerModal_index, 1);  //从当前下表开始，删除一个值。
+                },
+            });
+
+        }
+
+        $('#dangerModal').modal('hide');
+    }
+
+    //编辑或新增后确认操作
+    function save() {
+        var modalForm = document.getElementById('modalForm');
+        if (modalForm.checkValidity() === true) {
+            //获取页面的值
+            var index = $("#index").val();
+            var room_id = $("#room_id").val();
+            var fee_date = $("#fee_date").val();
+            var water_fee = $("#water_fee").val();
+            var electric_fee = $("#electric_fee").val();
+            //新增一条水电费信息
+            if (index == -1) {
+                $.ajax({
+                    type: 'POST',
+                    url: "/utilities/insert",
+                    data: {
+                        "room_id": room_id,
+                        "fee_date": fee_date,
+                        "water_fee": water_fee,
+                        "electric_fee": electric_fee,
+                        "pay_status": "未缴费"
+                    },
+                    success: function (data) {
+                        utilities.unshift({
+                            room_id: room_id,
+                            fee_date: fee_date,
+                            water_fee: water_fee,
+                            electric_fee: electric_fee,
+                            pay_date: "",
+                            pay_status: "未缴费"
+                        }); //添加一行
+                    },
+                });
+            }
+            //编辑一条水电费信息。
+            else {
+                var id = utilities [index].id; //获取当前索引值在数据库中的id
+                $.ajax({
+                    url: "http://localhost:9000/utilities/update",
+                    data: {
+                        "id": id,
+                        "room_id": room_id,
+                        "fee_date": fee_date,
+                        "water_fee": water_fee,
+                        "electric_fee": electric_fee
+                    },
+                    success: function (data) {
+                        //编辑成功后渲染到页面
+                        utilities [index].room_id = room_id;
+                        utilities [index].fee_date = fee_date;
+                        utilities [index].water_fee = water_fee;
+                        utilities [index].electric_fee = electric_fee;
+                    },
+                });
+            }
+            $('#primaryModal').modal('hide');
+        } else {
+            event.preventDefault();//阻止默认行为
+            event.stopPropagation();//禁止该事件往上传播（type="submit"阻止提交表单）。
+        }
+        modalForm.classList.add('was-validated');//给表单添加一个"class"
+
+    }
+
+
+    $('#primaryModal').on('show.bs.modal', function (e) {
+        var button = $(e.relatedTarget);
+        var rowIndex = button.data('rowindex');
+        //表头索引值为找不到，返回-1
+        if (rowIndex === undefined) {
+            var modal = $(this)
+            modal.find('.modal-body #index').val("-1");
+            modal.find('.modal-body #room_id').val(null);
+            modal.find('.modal-body #fee_date').val(null);
+            modal.find('.modal-body #water_fee').val(null);
+            modal.find('.modal-body #electric_fee').val(null);
+        } else {
+            //将页面上待编辑的水电费信息填到编辑框中。
+            var utilitie = utilities[rowIndex];
+            var modal = $(this)
+            modal.find('.modal-body #index').val(rowIndex);
+            modal.find('.modal-body #room_id').val(utilitie.room_id);
+            modal.find('.modal-body #fee_date').val(utilitie.fee_date);
+            modal.find('.modal-body #water_fee').val(utilitie.water_fee);
+            modal.find('.modal-body #electric_fee').val(utilitie.electric_fee);
+        }
+        return;
+    })
+
+
+    $('#dangerModal').on('show.bs.modal', function (e) {
+        var button = $(e.relatedTarget);
+        var rowIndex = button.data('dangerrowindex');
+        if (rowIndex === undefined) {
+            var modal = $(this)
+            modal.find('.modal-body #dangerModal_Index').val(-1);
+        } else {
+            var modal = $(this)
+            modal.find('.modal-body #dangerModal_Index').val(rowIndex);
+        }
+        return;
+    });
+
+    //编辑或新增一条水电费信息
+    function add() {
+        //修改编辑框和新建框的标题。
+        var title = $('#modal-title').text();
+        if (title === "编辑") {
+        } else {
+            $('#modal-title').text("新增");
+        }
+        $('#primaryModal').modal('show');  //显示模态框
+    }
+
+    //删除一条或批量删除水电费信息
+    function selectDelete() {
+        $('#dangerModal').modal('show');
+    }
 </script>
 </body>
 </html>

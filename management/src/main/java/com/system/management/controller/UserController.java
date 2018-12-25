@@ -1,6 +1,7 @@
 package com.system.management.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.system.management.dao.UserMapper;
 import com.system.management.model.User;
 import com.system.management.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 @Controller
 public class UserController {
+
     @PostMapping(value = "/user/loginService")
     @ResponseBody
     public Map login(@RequestBody User user) {
@@ -19,6 +21,7 @@ public class UserController {
         returnMsg.put("user",user.getUsername());
         return returnMsg;
     }
+
     @Autowired
     private UserService userService;
     /**
