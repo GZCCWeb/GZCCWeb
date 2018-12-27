@@ -545,7 +545,7 @@
     var utilities;   //水电费
     var userTableVM;
     var deleteItemsIndex = [];  //复选框数组
-
+    var check=true; //检查是否存在同一间房同一个月水电费是否唯一
     //将全部水电费信息渲染到页面
     $(function () {
         $.ajax({
@@ -592,7 +592,7 @@
                     url: "http://localhost:9000/utilities/delete",
                     data: {id: id},
                     success: function (data) {
-                        utilities.splice(index,deleteItemsIndex.length);
+                        utilities.splice(index, 1);
                     },
                 });
             });
@@ -626,51 +626,66 @@
             var water_fee = $("#water_fee").val();
             var electric_fee = $("#electric_fee").val();
             //新增一条水电费信息
+
             if (index == -1) {
-                $.ajax({
-                    type: 'POST',
-                    url: "/utilities/insert",
-                    data: {
-                        "room_id": room_id,
-                        "fee_date": fee_date,
-                        "water_fee": water_fee,
-                        "electric_fee": electric_fee,
-                        "pay_status": "未缴费"
-                    },
-                    success: function (data) {
-                        utilities.unshift({
-                            room_id: room_id,
-                            fee_date: fee_date,
-                            water_fee: water_fee,
-                            electric_fee: electric_fee,
-                            pay_date: "",
-                            pay_status: "未缴费"
-                        }); //添加一行
-                    },
-                });
+                checkRoomId(index)
+                if (check === true) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "/utilities/insert",
+                        data: {
+                            "room_id": room_id,
+                            "fee_date": fee_date,
+                            "water_fee": water_fee,
+                            "electric_fee": electric_fee,
+                            "pay_status": "未缴费"
+                        },
+                        success: function (data) {
+                            utilities.unshift({
+                                room_id: room_id,
+                                fee_date: fee_date,
+                                water_fee: water_fee,
+                                electric_fee: electric_fee,
+                                pay_date: "",
+                                pay_status: "未缴费"
+                            }); //添加一行
+                        },
+                    });
+
+                }else{
+                    alert("同一个房间号每个月的水电费不能重复");
+                }
+                $('#primaryModal').modal('hide');
+
+            } //编辑一条水电费信息。
+            if(index != -1) {
+                checkRoomId(index)
+                if (check === true){
+                    var id = utilities [index].id; //获取当前索引值在数据库中的id
+                    $.ajax({
+                        url: "http://localhost:9000/utilities/update",
+                        data: {
+                            "id": id,
+                            "room_id": room_id,
+                            "fee_date": fee_date,
+                            "water_fee": water_fee,
+                            "electric_fee": electric_fee
+                        },
+                        success: function (data) {
+                            //编辑成功后渲染到页面
+                            utilities [index].room_id = room_id;
+                            utilities [index].fee_date = fee_date;
+                            utilities [index].water_fee = water_fee;
+                            utilities [index].electric_fee = electric_fee;
+                        },
+                    });
+                }else{
+                    alert("同一个房间号每个月的水电费不能重复");
+
+                }
+                $('#primaryModal').modal('hide');
             }
-            //编辑一条水电费信息。
-            else {
-                var id = utilities [index].id; //获取当前索引值在数据库中的id
-                $.ajax({
-                    url: "http://localhost:9000/utilities/update",
-                    data: {
-                        "id": id,
-                        "room_id": room_id,
-                        "fee_date": fee_date,
-                        "water_fee": water_fee,
-                        "electric_fee": electric_fee
-                    },
-                    success: function (data) {
-                        //编辑成功后渲染到页面
-                        utilities [index].room_id = room_id;
-                        utilities [index].fee_date = fee_date;
-                        utilities [index].water_fee = water_fee;
-                        utilities [index].electric_fee = electric_fee;
-                    },
-                });
-            }
-            $('#primaryModal').modal('hide');
+
         } else {
             event.preventDefault();//阻止默认行为
             event.stopPropagation();//禁止该事件往上传播（type="submit"阻止提交表单）。
@@ -723,6 +738,7 @@
         //修改编辑框和新建框的标题。
         var title = $('#modal-title').text();
         if (title === "编辑") {
+            $('#modal-title').text("编辑");
         } else {
             $('#modal-title').text("新增");
         }
@@ -732,6 +748,22 @@
     //删除一条或批量删除水电费信息
     function selectDelete() {
         $('#dangerModal').modal('show');
+    }
+
+    function checkRoomId(index) {
+        for(var i=0;i<utilities.length;i++){
+            if ($("#room_id").val()== utilities[i].room_id && $("#fee_date").val().substring(0,7)  == utilities[i].fee_date.substring(0,7))           {
+                if(index!=-1){
+                    if($("#room_id").val()== utilities[index].room_id && $("#fee_date").val().substring(0,7)  == utilities[index].fee_date.substring(0,7)){
+                        continue;
+                    }else{
+                        check = false;
+                    }
+                }else{
+                    check = false;
+                }
+            }
+        }
     }
 </script>
 </body>
