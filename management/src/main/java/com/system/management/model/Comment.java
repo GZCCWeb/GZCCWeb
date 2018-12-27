@@ -1,9 +1,6 @@
 package com.system.management.model;
 
-import com.mysql.cj.x.protobuf.MysqlxResultset;
-
 import java.sql.Date;
-import java.sql.Time;
 
 public class Comment {
     private int id;
