@@ -181,16 +181,60 @@
 
                 </div>
 
+                <!--<div class="alert alert-secondary" role="alert" style="padding: 5px;margin-top: 50px;margin-bottom: 5px">-->
+                    <!--<div class="panel panel-default" style="margin-top: 10px;">-->
+                        <!--<div class="panel-body" id="commentItems">-->
+                            <!--<ul id="comment" class="list-group" style="padding-left: 0px;margin: 0px">-->
+                                <!--<li class="list-group-item" v-for="todo in todos">-->
+                                    <!--<i class="fa fa-user-circle-o"></i>-->
+                                    <!--{{todo.username}}-->
+                                    <!--<i class="fa fa-clock-o"></i>-->
+                                    <!--{{todo.comment_time}}-->
+                                    <!--{{ todo.text }}-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
                 <div class="alert alert-secondary" role="alert" style="padding: 5px;margin-top: 50px;margin-bottom: 5px">
-                    <div class="panel panel-default" style="margin-top: 10px;">
-                        <div class="panel-body" id="commentItems">
-                            <ul id="comment" style="overflow-y: hidden; height: 30px;padding-left: 0px;margin: 0px">
-                                <li class="comment-item" v-for="todo in todos">
-                                    {{todo.username}}：{{ todo.text }}
+                        <div class="list-group" id="commentItems">
+                            <ul class="list-group-item"  v-for="todo in todos">
+                                <li style="list-style-type:none;">
+                                    <h4>
+                                        <i class="fa fa-user-circle-o"></i>
+                                        {{todo.username}}
+                                    </h4>
+                                </li>
+                                <li style="list-style-type:none;">
+                                    <p style="color: grey">
+                                        <i class="fa fa-clock-o"></i>
+                                        {{todo.comment_time}}
+                                    </p>
+                                </li>
+                                <li style="list-style-type:none;">
+                                    <p>{{ todo.text }}</p>
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                    <nav aria-label="Page navigation example" id="commentIndex">
+                        <ul class="pagination">
+                            <li class="page-item" id="previousComment">
+                                <a class="page-link" aria-label="Previous" >
+                                    <span aria-hidden="true">«</span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                            </li>
+                            <li class="page-item" v-for="(todo,index) in todos">
+                                <a class="page-link" v-bind:href="'javascript:loadCommentPage('+index+')'">{{todo.index}}</a>
+                            </li>
+                            <li class="page-item" id="nextComment">
+                                <a class="page-link" aria-label="Next" >
+                                    <span aria-hidden="true">»</span>
+                                    <span class="sr-only">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
                 <button class="btn btn-info" type="button" data-toggle="modal" data-target="#comment-modal">评论</button>
                 <button class="btn btn-light" type="button" id="refresh-comment">刷新</button>
@@ -270,7 +314,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="saveComment" class="btn btn-primary">保存</button>
+                    <button type="button" id="saveComment" class="btn btn-primary">提交评论</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
                 </div>
             </div>
@@ -289,13 +333,7 @@
         <a href="https://coreui.io">CoreUI</a>
       </div>
     </footer>
-    <style>
-        .comment-item{
-            height: 50px;
-            list-style:none;
-            line-height: 100%;
-        }
-    </style>
+
     <!-- CoreUI and necessary plugins-->
     <script src="vendors/jquery/js/jquery.min.js"></script>
     <script src="vendors/jquery/js/jquery.bootstrap.newsbox.min.js"></script>
@@ -306,15 +344,17 @@
     <script src="vendors/@coreui/coreui/js/coreui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
     <script>
-
         var pageItems = [];
         var paidItems = [];
         var unPaidItems = [];
         var allPaidItems = [];
         var commentItems = [];
+        var allCommentItems = [];
+        var commentPageIndex = 0;
+        var commentIndex = [];
         var billcount = {count:0};
         var itemsIndex = -1;
-        var user = {"room_id":"206","username":"李灏淳"}
+        var user = {"room_id":"201","username":"李灏淳"}
 
         $.ajax({
             url: "/bill",
@@ -333,17 +373,17 @@
                     }
                     allPaidItems.push(msg[i])
                 }
-                $("#comment").bootstrapNews({
-                    newsPerPage: 1,  //一个页面显示的新闻条数
-                    autoplay: true,   //是否自动播放
-                    navigation: false,  //是否为导航模式,也就是下面是否有上一页下一页的按钮
-                    pauseOnHover:false,  //是否鼠标滑过暂停滚动
-                    direction: 'up',    //方向
-                    newsTickerInterval: 2000,   //每隔几秒切换下一条
-                    onToDo: function () {   //回调函数
-                        //console.log(this);
-                    }
-                });
+                // $("#comment").bootstrapNews({
+                //     newsPerPage: 1,  //一个页面显示的新闻条数
+                //     autoplay: true,   //是否自动播放
+                //     navigation: false,  //是否为导航模式,也就是下面是否有上一页下一页的按钮
+                //     pauseOnHover:false,  //是否鼠标滑过暂停滚动
+                //     direction: 'up',    //方向
+                //     newsTickerInterval: 2000,   //每隔几秒切换下一条
+                //     onToDo: function () {   //回调函数
+                //         //console.log(this);
+                //     }
+                // });
             },
             error: function () {
                 alert("与服务器失去连接");
@@ -355,8 +395,16 @@
             async:true,
             dataType: "json",//表示返回的格式是json
             success: function (msg) {
+                var j = 1;
                 for (var i=0;i<msg.length;i++) {
-                    commentItems.push(msg[i])
+                    allCommentItems.push(msg[i])
+                    if (i % 10 == 0){
+                        commentIndex.push({index:j})
+                        j++;
+                    }
+                }
+                for (var i=0;i < 10 && i < msg.length;i++) {
+                    commentItems.push(allCommentItems[i])
                 }
             },
             error: function () {
@@ -365,54 +413,51 @@
         })
 
         //setInterval("getComment()",5000);
-        // function getComment(){
-        //     $.ajax({
-        //         url: "/comment",
-        //         type: "GET",
-        //         async:true,
-        //         dataType: "json",//表示返回的格式是json
-        //         success: function (msg) {
-        //             for (var i=0;i<msg.length;i++) {
-        //                 commentItems.splice(i,1,msg[i])
-        //             }
-        //         },
-        //         error: function () {
-        //             //alert("与服务器失去连接");
-        //         }
-        //     })
-
-        $("#refresh-comment").click(function (){
+        function getComment() {
             $.ajax({
                 url: "/comment",
                 type: "GET",
-                async:true,
+                async: true,
                 dataType: "json",//表示返回的格式是json
                 success: function (msg) {
-                    for (var i=0;i<msg.length;i++) {
-                        commentItems.splice(i,1,msg[i])
+                    for (var i = 0; i < msg.length; i++) {
+                        allCommentItems.splice(i, 1, msg[i])
+                    }
+                    for (var i=0;i < 10 && i < msg.length;i++) {
+                        commentItems.splice(i, 1, allCommentItems[i])
                     }
                 },
                 error: function () {
                     //alert("与服务器失去连接");
                 }
             })
+        }
+
+        $("#refresh-comment").click(function (){
+            getComment()
         })
 
-        $("#comment").bootstrapNews({
-            newsPerPage: 1,  //一个页面显示的新闻条数
-            autoplay: true,   //是否自动播放
-            navigation: false,  //是否为导航模式,也就是下面是否有上一页下一页的按钮
-            pauseOnHover:false,  //是否鼠标滑过暂停滚动
-            direction: 'up',    //方向
-            newsTickerInterval: 2000,   //每隔几秒切换下一条
-            onToDo: function () {   //回调函数
-                //console.log(this);
-            }
-        });
+        // $("#comment").bootstrapNews({
+        //     newsPerPage: 5,  //一个页面显示的新闻条数
+        //     autoplay: false,   //是否自动播放
+        //     navigation: true,  //是否为导航模式,也就是下面是否有上一页下一页的按钮
+        //     pauseOnHover:false,  //是否鼠标滑过暂停滚动
+        //     //direction: 'up',    //方向
+        //     //newsTickerInterval: 2000,   //每隔几秒切换下一条
+        //     onToDo: function () {   //回调函数
+        //         //console.log(this);
+        //     }
+        // });
         var comment = new Vue({
             el: '#commentItems',
             data: {
-                todos: commentItems
+                todos: commentItems,
+            }
+        })
+        var comment_index = new Vue({
+            el: '#commentIndex',
+            data: {
+                todos: commentIndex,
             }
         })
         var billnumber = new Vue({
@@ -438,6 +483,28 @@
                 return;
             });
 
+        }
+
+        $("#previousComment").click(function () {
+            loadCommentPage(commentPageIndex/10 - 1)
+        })
+        $("#nextComment").click(function () {
+            loadCommentPage(commentPageIndex/10 + 1)
+        })
+        function loadCommentPage(index) {
+            commentPageIndex = index * 10;
+            if (index < 0) {
+                alert("已经是第一页了")
+            }else if (index >= commentIndex.length){
+                alert("已经是最后一页了")
+            } else {
+                for (var i = 0;i < 10;i++) {
+                    commentItems.splice(i, 1, allCommentItems[commentPageIndex + i])
+                }
+                if (allCommentItems.length - commentPageIndex < 10) {
+                    commentItems.splice(allCommentItems.length - commentPageIndex,10 - (allCommentItems.length - commentPageIndex))
+                }
+            }
         }
         function loadItemModal(itemIndex) {
             //还原表单为未检查状态（之前的操作后的表单状态会保留需要还原）
@@ -483,7 +550,8 @@
                 type: "GET",
                 data:{
                     "username":user.username,
-                    "text":$('#comment-text').val()
+                    "text":$('#comment-text').val(),
+                    "comment_time":getNowFormatDate()
                 },
                 success: function(data){
                     $.ajax({
