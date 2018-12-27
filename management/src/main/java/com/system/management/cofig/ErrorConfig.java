@@ -14,10 +14,11 @@ import org.springframework.http.HttpStatus;
 public class ErrorConfig implements ErrorPageRegistrar {
     @Override
     public void registerErrorPages(ErrorPageRegistry errorPageRegistry) {
-        ErrorPage page404 = new ErrorPage(HttpStatus.NOT_FOUND, "/404");
-        ErrorPage page500 = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500");
+        ErrorPage page404 = new ErrorPage(HttpStatus.NOT_FOUND, "/404Page");
+        ErrorPage page403 = new ErrorPage(HttpStatus.FORBIDDEN, "/403Page");
+        ErrorPage page500 = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500Page");
 
-        errorPageRegistry.addErrorPages(page404, page500);
+        errorPageRegistry.addErrorPages(page404, page500, page403);
     }
 
     @Bean
