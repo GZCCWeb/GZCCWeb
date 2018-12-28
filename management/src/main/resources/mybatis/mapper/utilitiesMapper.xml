@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.system.management.dao.UtilitiesMapper">
+    <select id="getAll" resultType="com.system.management.model.Fee">
+      select id,room_id,fee_date,water_fee,electric_fee,pay_date,pay_status  from utilities
+  </select>
+
+    <insert id="insert" parameterType="com.system.management.model.Fee">
+      insert into utilities (room_id,fee_date,water_fee,electric_fee,pay_date,pay_status)
+      values (#{room_id},#{fee_date},#{water_fee},#{electric_fee},#{pay_date},#{pay_status})
+      <selectKey resultType="int" keyProperty="id" order="AFTER">
+      select LAST_INSERT_ID()
+    </selectKey>
+  </insert>
+
+    <update id="update" parameterType="com.system.management.model.Fee">
+      update utilities set
+      room_id = #{room_id},
+      fee_date = #{fee_date},
+      water_fee = #{water_fee},
+      electric_fee = #{electric_fee}
+      where id = #{id}
+  </update>
+
+    <delete id="deleteById" parameterType="com.system.management.model.Fee">
+      delete from utilities where id = #{id}
+  </delete>
+</mapper>

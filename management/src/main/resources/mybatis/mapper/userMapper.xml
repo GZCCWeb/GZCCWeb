@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.system.management.dao.UserMapper" >
+    <resultMap id="userList" type="com.system.management.model.User" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="username" property="username" jdbcType="VARCHAR" />
+        <result column="sex" property="sex" jdbcType="VARCHAR" />
+        <result column="room_id" property="room_id" jdbcType="VARCHAR" />
+        <result column="register_datetime" property="register_datetime" jdbcType="VARCHAR" />
+        <result column="phone_number" property="phone_number" jdbcType="VARCHAR" />
+        <result column="id_number" property="id_number" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="selectList" resultMap="userList">
+      SELECT * FROM user
+    </select>
+
+    <delete id="deleteById">
+      delete from user where id = #{id}
+    </delete>
+
+    <update id="updateById" parameterType="com.system.management.model.User">
+      update user set
+        username = #{username},
+        sex = #{sex},
+        room_id = #{room_id},
+        register_datetime = #{register_datetime},
+        phone_number=#{phone_number},
+        id_number=#{id_number}
+      where id = #{id}
+   </update>
+
+
+    <insert id="create" parameterType="com.system.management.model.User" >
+        <selectKey resultType="int" keyProperty="id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into user (username,sex,room_id,register_datetime,phone_number,id_number)
+        VALUES (#{username},#{sex},#{room_id},#{register_datetime},#{phone_number},#{id_number})
+    </insert>
+
+    <select id="checkIdNumberUnique" parameterType="com.system.management.model.User" resultType="com.system.management.model.User">
+        select * from  user where id_number=#{id_number}
+    </select>
+
+    <select id="checkIdNumberChange" parameterType="com.system.management.model.User" resultType="com.system.management.model.User">
+        select * from  user where id_number=#{id_number} and id=#{id}
+    </select>
+
+
+</mapper>

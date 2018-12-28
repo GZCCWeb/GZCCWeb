@@ -6,14 +6,15 @@
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="text" property="text" jdbcType="VARCHAR" />
+        <result column="comment_time" property="comment_time" jdbcType="DATE" />
     </resultMap>
 
     <select id="getComment" resultMap="commentList">
-      SELECT * FROM comment order by id DESC limit 10
+      SELECT * FROM comment order by id DESC /*limit 10*/
     </select>
 
     <insert id="saveComment">
-      INSERT INTO comment (username,text)
-      VALUES (#{username},#{text})
+      INSERT INTO comment (username,text,comment_time)
+      VALUES (#{username},#{text},#{comment_time})
     </insert>
 </mapper>

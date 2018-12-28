@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.Date;
 import java.util.List;
 
@@ -17,6 +19,9 @@ public class TenantController {
     @Autowired
     private TenantMapper tenantMapper;
 
+    @Autowired
+    HttpServletRequest request;
+
     /**
      * 获取所有账单
      * @param room_id
@@ -24,7 +29,13 @@ public class TenantController {
      */
     @RequestMapping(value = "/bill")
     @ResponseBody
-    public List<Tenant> getBill(@RequestParam Integer room_id) {
+    public List<Tenant> getBill() {
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute("room_id",201);
+
+
+        int room_id = (int) httpSession.getAttribute("room_id");
+
         List<Tenant> msg = tenantMapper.getBillByRoomId(room_id);
         return msg;
     }
@@ -41,4 +52,6 @@ public class TenantController {
         int msg = tenantMapper.payByID(id,pay_date);
         return msg;
     }
+
+
 }
