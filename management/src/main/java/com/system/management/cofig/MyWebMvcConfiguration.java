@@ -16,10 +16,13 @@ public class MyWebMvcConfiguration implements WebMvcConfigurer {
         System.out.println("拦截器配置");
         LoginInterceptor loginInterceptor = new LoginInterceptor();
         InterceptorRegistration interceptorRegistration = registry.addInterceptor(loginInterceptor);
-
         //  放行
         interceptorRegistration.excludePathPatterns("/static/**");                                                      //  静态资源
         interceptorRegistration.excludePathPatterns("/logger/**");                                                      //  登陆登出日志
         interceptorRegistration.excludePathPatterns("/utils/**");                                                       //  工具
+        //  拦截
+        interceptorRegistration.addPathPatterns("/**");
+
+
     }
 }

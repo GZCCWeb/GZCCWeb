@@ -1,8 +1,6 @@
 package com.system.management;
 
 import com.system.management.utils.CreateImageCode;
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.velocity.app.VelocityEngine;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

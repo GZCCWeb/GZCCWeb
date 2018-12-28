@@ -28,20 +28,20 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Object userNumber = request.getSession().getAttribute("userNumber");
-        if (null == userNumber || !(userNumber instanceof String)) {
-            //  异步拦截
-            if (request.getHeader("x-requested-with") != null && request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")){ //如果是ajax请求响应头会有，x-requested-with
-                Msg msg = new Msg();
-                msg.setStatus(Protocol.INVALIATE | Protocol.ACCOUNT);
-            }else{
-                //  同步拦截
-                response.sendRedirect("/loginPage");
-            }
-            // 未登录，重定向到登录页
-
-            System.out.println("执行拦截器");
-            return false;
-        }
+//        if (null == userNumber || !(userNumber instanceof String)) {
+//            //  异步拦截
+//            if (request.getHeader("x-requested-with") != null && request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")){ //如果是ajax请求响应头会有，x-requested-with
+//                Msg msg = new Msg();
+//                msg.setStatus(Protocol.INVALIATE | Protocol.ACCOUNT);
+//            }else{
+//                //  同步拦截
+//                response.sendRedirect("/loginPage");
+//            }
+//            // 未登录，重定向到登录页
+//
+//            System.out.println("执行拦截器");
+//            return false;
+//        }
         return true;
     }
 
