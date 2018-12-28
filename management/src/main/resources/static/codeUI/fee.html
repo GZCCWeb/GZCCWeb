@@ -545,7 +545,7 @@
     var utilities;   //水电费
     var userTableVM;
     var deleteItemsIndex = [];  //复选框数组
-    var check=true; //检查是否存在同一间房同一个月水电费是否唯一
+
     //将全部水电费信息渲染到页面
     $(function () {
         $.ajax({
@@ -565,7 +565,7 @@
     //全选
     function selectAll() {
         var selected = $('#selectAll').get(0).checked;
-        var i = 0;
+        //var i = 0;
         $.each($("#name_table table tbody input[type=checkbox]"), function (index, element) {
             this.checked = selected;
         });
@@ -619,6 +619,7 @@
     function save() {
         var modalForm = document.getElementById('modalForm');
         if (modalForm.checkValidity() === true) {
+
             //获取页面的值
             var index = $("#index").val();
             var room_id = $("#room_id").val();
@@ -628,8 +629,8 @@
             //新增一条水电费信息
 
             if (index == -1) {
-                checkRoomId(index)
-                if (check === true) {
+
+                if ( checkRoomId(index) === true) {
                     $.ajax({
                         type: 'POST',
                         url: "/utilities/insert",
@@ -653,14 +654,14 @@
                     });
 
                 }else{
-                    alert("同一个房间号每个月的水电费不能重复");
+                    alert("该月份房间水电费已存在，请重新输入!");
                 }
                 $('#primaryModal').modal('hide');
 
             } //编辑一条水电费信息。
             if(index != -1) {
-                checkRoomId(index)
-                if (check === true){
+
+                if ( checkRoomId(index)=== true){
                     var id = utilities [index].id; //获取当前索引值在数据库中的id
                     $.ajax({
                         url: "http://localhost:9000/utilities/update",
@@ -680,7 +681,7 @@
                         },
                     });
                 }else{
-                    alert("同一个房间号每个月的水电费不能重复");
+                    alert("该月份房间水电费已存在，请重新输入!");
 
                 }
                 $('#primaryModal').modal('hide');
@@ -751,6 +752,7 @@
     }
 
     function checkRoomId(index) {
+        var check=true; //检查是否存在同一间房同一个月水电费是否唯一
         for(var i=0;i<utilities.length;i++){
             if ($("#room_id").val()== utilities[i].room_id && $("#fee_date").val().substring(0,7)  == utilities[i].fee_date.substring(0,7))           {
                 if(index!=-1){
@@ -764,6 +766,7 @@
                 }
             }
         }
+        return check
     }
 </script>
 </body>
