@@ -13,15 +13,6 @@ import java.util.Map;
 
 @Controller
 public class UserController {
-
-    @PostMapping(value = "/user/loginService")
-    @ResponseBody
-    public Map login(@RequestBody User user) {
-        JSONObject returnMsg = new JSONObject();
-        returnMsg.put("user",user.getUsername());
-        return returnMsg;
-    }
-
     @Autowired
     private UserService userService;
     /**

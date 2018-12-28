@@ -16,8 +16,21 @@ spring:
     view:
       prefix: classpath:/templates/
       suffix: .html
+  mail: #邮箱验证
+    host:      smtp.qq.com 
+    port: 25
+    username:  2192301902@qq.com
+    password:  lntfdzjlfcwgeacc
+    properties:
+      mail:
+        stmp:
+          auth: true
+          starttls:
+            required: true
+            enable: true
 
 mybatis: #mybatis配置
   config-location: classpath:mybatis/mybatis-config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
   type-aliases-package: com.system.management.model
+
